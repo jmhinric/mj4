@@ -41,6 +41,7 @@ group :development, :test do
   gem 'factory_girl'
   gem 'factory_girl_rails'
   gem 'jasmine'
+  gem 'selenium-webdriver'
 end
 
 # Use ActiveModel has_secure_password
