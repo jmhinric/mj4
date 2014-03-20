@@ -36,15 +36,18 @@ $(document).ready(function () {
     $(".playcard").attr("disabled", "disabled");
   }
 
-  function createButton() {
-    var dieButton = $("<button>").attr("id", "die_button").text("Roll The Die");
-    $(".die").append(dieButton);
-  }
-  createButton();
+  var buttonPress = $("#die_button");
 
-  function randomLetter() {
-    var buttonPress = $("#die_button");
-    buttonPress.on("click", function() {
+  buttonPress.on("click", function() {
+    var letter = $.ajax({
+      dataType: "json",
+      url: "letter",
+      success: function(success) {
+        $("#roll_result").text(success.letter);
+      }
+    });
 
-  };
+    buttonPress.attr("disabled", true);
+  });
+
 });
