@@ -2,13 +2,14 @@
 
   <div class="category-list">
     <ol class="category-names">
+      <%=@category_lists%>
     </ol>
   </div>
 
   <div class="playcard">
     <% (1..12).to_a.each do |n| %>
       <label class="answer-label">Answer <%= n %></label>
-        <input class="playcard" id="slot_<%= n %>" type="text"></input>
+        <input class="playcard" id="slot_<%= n %>" type="text"></input><br/>
     <% end %>
   </div>
 
