@@ -40,6 +40,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl'
   gem 'factory_girl_rails'
+  gem 'jasmine'
 end
 
 # Use ActiveModel has_secure_password
