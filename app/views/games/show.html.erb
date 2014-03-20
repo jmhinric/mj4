@@ -1,5 +1,5 @@
 <div class="page-wrapper">
-
+  <header>Welcome to Scattergories</header>
   <!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
   <div class="playcard">
     <% @game.category_list[:list_one].each do |category| %>
@@ -12,9 +12,10 @@
 
   <div class="game-controls">
     <div class="die">
-      
+
     </div>
     <div class="timer">
+      <button>Start Timer!</button>
     </div>
     <div class="next-round-button">
     </div>
