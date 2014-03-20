@@ -12,4 +12,17 @@ $(document).ready(function () {
   }
 
   createCategories();
-}
+
+  function createButton() {
+    var dieButton = $("<button>").attr("id", "die_button").text("Roll The Die");
+    $(".die").append(dieButton);
+  }
+  createButton();
+
+  function randomLetter() {
+    var buttonPress = $("#die_button");
+    buttonPress.on("click", function() {
+
+    });
+  }
+});

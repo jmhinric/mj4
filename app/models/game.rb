@@ -7,4 +7,9 @@ class Game < ActiveRecord::Base
     return @category_lists
   end
 
+  def random_letter
+    @random_letter = ("a".."z").to_a
+    @random_letter.sample
+  end
+
 end
