@@ -1,19 +1,23 @@
 <div class="page-wrapper">
 
-  <div class="category-list">
-    <ol class="category-names">
-      <%=@category_lists%>
-    </ol>
-  </div>
-
+  <!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
   <div class="playcard">
-    <% (1..12).to_a.each do |n| %>
-      <label class="answer-label">Answer <%= n %></label>
+    <% @game.category_list[:list_one].each do |category| %>
+      <% n = 1 %>
+      <label class="answer-label"><%= category %></label>
         <input class="playcard" id="slot_<%= n %>" type="text"></input><br/>
+      <% n+= 1 %>
     <% end %>
   </div>
 
   <div class="game-controls">
+    <div class="die">
+      
+    </div>
+    <div class="timer">
+    </div>
+    <div class="next-round-button">
+    </div>
   </div>
 
 </div>
