@@ -1,6 +1,7 @@
 Scattergories::Application.routes.draw do
-  root to: "welcome#index"
+  root "games#new"
 
-  resources :games, only: [:new, :create, :show]
+  resources :games, only: [:show, :create]
+
   # get "games/:game_number", to: "games#show"
 end
