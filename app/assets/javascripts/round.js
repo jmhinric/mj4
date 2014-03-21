@@ -15,6 +15,7 @@ $(document).ready(function () {
   // createCategories();
   var timer = $(".timer button");
   timer.one("click", function() {
+    $(".playcard").removeAttr('disabled');
     intervalId = setInterval(countDown, 1000);
   });
 
