@@ -16,7 +16,7 @@ $(document).ready(function () {
   var timer = $(".timer button");
   timer.one("click", function() {
     intervalId = setInterval(countDown, 1000);
-    });
+  });
 
   function countDown() {
     time -= 1;
@@ -41,22 +41,47 @@ $(document).ready(function () {
   }
 
   function usersJudgeAnswers() {
+
     for(var i = 1; i < 13; i++) {
       var button = $("<button>").text("Reject");
       button.addClass("reject-button");
       button.attr("id", "reject-" + i);
 
       var id = "#slot-" + i;
-      button.appendTo(id);
+      button.appendTo(id); 
       
       $(button).one("click", function() {
         updateScore();
 
         $(this).css("background", "red");
         $(this).siblings().css("text-decoration", "line-through");
+        $(this).siblings().css("background", "lightgray");
       });
     }
   }
+
+  function rejectBadAnswers() {
+    for(var i = 1; i < 13; i++) {
+      var randomLetter = $("#roll_result").text();
+      if ( $('#answer-' + i).val() == "" ) {
+        $('#reject-' + i).css("background", "red");
+        $('#reject-' + i).siblings().css("background", "lightgray");
+      } else if ( $('#answer-' + i).val().charAt(0) !== randomLetter ) {
+        $('#reject-' + i).css("background", "red");
+        $('#reject-' + i).siblings().css("background", "lightgray");
+      }
+    }
+  }
+
+  function timeUp() {
+    clearInterval(intervalId);
+    $("header").text("Time's Up!!!");
+    $(".playcard").attr("disabled", "disabled");
+    usersJudgeAnswers();
+    rejectBadAnswers();
+  }
+
+  var randomLetterButton = $("#die_button");
 
   function updateScore() {
     score--;
@@ -83,7 +108,7 @@ $(document).ready(function () {
 
   var buttonPress = $("#die_button");
 
-  buttonPress.on("click", function() {
+  randomLetterButton.on("click", function() {
     var letter = $.ajax({
       dataType: "json",
       url: "letter",
@@ -92,7 +117,7 @@ $(document).ready(function () {
       }
     });
 
-    buttonPress.attr("disabled", true);
+    randomLetterButton.attr("disabled", true);
   });
 
 });
