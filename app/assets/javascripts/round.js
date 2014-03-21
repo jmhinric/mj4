@@ -16,7 +16,7 @@ $(document).ready(function () {
   var timer = $(".timer button");
   timer.one("click", function() {
     intervalId = setInterval(countDown, 1000);
-    });
+  });
 
   function countDown() {
     time -= 1;
@@ -71,9 +71,9 @@ $(document).ready(function () {
     }
   }
 
-  var buttonPress = $("#die_button");
+  var randomLetterButton = $("#die_button");
 
-  buttonPress.on("click", function() {
+  randomLetterButton.on("click", function() {
     var letter = $.ajax({
       dataType: "json",
       url: "letter",
@@ -82,7 +82,7 @@ $(document).ready(function () {
       }
     });
 
-    buttonPress.attr("disabled", true);
+    randomLetterButton.attr("disabled", true);
   });
 
 });
