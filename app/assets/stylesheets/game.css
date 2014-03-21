@@ -28,3 +28,12 @@
 .score {
 	margin: 50px;
 }
+
+button.rejected {
+	background-color: red;
+}
+
+input.rejected {
+	text-decoration: line-through;
+	background-color: lightgray;
+}
