@@ -37,11 +37,13 @@ $(document).ready(function () {
     $(".playcard").attr("disabled", "disabled");
     $("<h3>").text("Score: " + score).appendTo(".score");
     usersJudgeAnswers();
+    finishScoring();
   }
 
   function usersJudgeAnswers() {
     for(var i = 1; i < 13; i++) {
       var button = $("<button>").text("Reject");
+      button.addClass("reject-button");
       button.attr("id", "reject-" + i);
 
       var id = "#slot-" + i;
@@ -59,8 +61,25 @@ $(document).ready(function () {
   function updateScore() {
     score--;
     $(".score h3").text("Score: " + score);
+  }
+
+  function finishScoring() {
+    var finishButton = $("<button id='submit-scores'>");
+    finishButton.addClass("finish-button");
+    finishButton.text("Finished Scoring");
+    finishButton.one("click", endGame);
+    finishButton.appendTo(".score");
 
   }
+
+  function endGame() {
+    $("<h1>").text("Game Over!").appendTo(".score");
+    $("<h2>").text("Final Score: " + score).appendTo(".score");
+    $(".reject-button").attr("disabled", true);
+    $(".finish-button").remove();
+    $(".score h3").remove();
+  }
+
 
   var buttonPress = $("#die_button");
 
