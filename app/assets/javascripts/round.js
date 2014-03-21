@@ -1,7 +1,38 @@
+function Round(){
+  this.letter = "";
+}
+
+Round.prototype.setLetter = function( letter ){
+  this.letter = letter;
+};
+
+
+// Round.prototype.render = function(){
+//   // grab an element on the DOM
+//   // create all of the elements for the round
+//   // hook these elements on to the DOM via the first element you grabbed
+//   $();
+// };
+
+// Round.prototype.synchronize = function(){
+//  $.ajax();
+// };
+
+
+
+
+
+
+
+
+
+
+
 $(document).ready(function () {
   var intervalId;
   var time = 6;
   var score = 12;
+  var letterSelected = false;
   // var categoryLists = {};
   // categoryLists["listOne"] = ["A boy's name", "A river", "An animal", "Things that are cold", "Insects", "TV Shows", "Things that grow", "Fruits", "Things that are black", "School subjects", "Movie Titles", "Musical Instruments"];
 
@@ -14,6 +45,7 @@ $(document).ready(function () {
   // }
   // createCategories();
   var timer = $(".timer button");
+  timer.attr("disabled", true);
   timer.one("click", function() {
     intervalId = setInterval(countDown, 1000);
   });
@@ -31,14 +63,6 @@ $(document).ready(function () {
     }
   }
 
-  function timeUp() {
-    clearInterval(intervalId);
-    $("header").text("Time's Up!!!");
-    $(".playcard").attr("disabled", "disabled");
-    $("<h3>").text("Score: " + score).appendTo(".score");
-    usersJudgeAnswers();
-  }
-
   function usersJudgeAnswers() {
 
     for(var i = 1; i < 13; i++) {
@@ -53,7 +77,7 @@ $(document).ready(function () {
         
         $(this).toggleClass("rejected");
         $(this).siblings().toggleClass("rejected");
-        
+
         
       });
     }
@@ -84,6 +108,7 @@ $(document).ready(function () {
     rejectBadAnswers();
   }
 
+
   var randomLetterButton = $("#die_button");
 
   function updateScore() {
@@ -113,6 +138,7 @@ $(document).ready(function () {
   var buttonPress = $("#die_button");
 
   randomLetterButton.on("click", function() {
+    timer.attr("disabled", false);
     var letter = $.ajax({
       dataType: "json",
       url: "letter",
