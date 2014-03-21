@@ -10,7 +10,7 @@ class RoundsController < ApplicationController
   end
 
   def show
-    @round = Round.find_by_id(params[:id])
+    @round = Round.find(params[:id])
     @category_lists = @round.category_list
   end
 
