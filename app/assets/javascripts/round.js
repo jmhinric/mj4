@@ -31,27 +31,43 @@ $(document).ready(function () {
     }
   }
 
-  function timeUp() {
-    clearInterval(intervalId);
-    $("header").text("Time's Up!!!");
-    $(".playcard").attr("disabled", "disabled");
-    usersJudgeAnswers();
-  }
-
   function usersJudgeAnswers() {
+
     for(var i = 1; i < 13; i++) {
       var button = $("<button>").text("Reject");
       button.attr("id", "reject-" + i);
 
       var id = "#slot-" + i;
-      button.appendTo(id);
+      button.appendTo(id); 
       
       $(button).one("click", function() {
         score --;
         $(this).css("background", "red");
         $(this).siblings().css("text-decoration", "line-through");
+        $(this).siblings().css("background", "lightgray");
       });
     }
+  }
+
+  function rejectBadAnswers() {
+    for(var i = 1; i < 13; i++) {
+      var randomLetter = $("#roll_result").text();
+      if ( $('#answer-' + i).val() == "" ) {
+        $('#reject-' + i).css("background", "red");
+        $('#reject-' + i).siblings().css("background", "lightgray");
+      } else if ( $('#answer-' + i).val().charAt(0) !== randomLetter ) {
+        $('#reject-' + i).css("background", "red");
+        $('#reject-' + i).siblings().css("background", "lightgray");
+      }
+    }
+  }
+
+  function timeUp() {
+    clearInterval(intervalId);
+    $("header").text("Time's Up!!!");
+    $(".playcard").attr("disabled", "disabled");
+    usersJudgeAnswers();
+    rejectBadAnswers();
   }
 
   var randomLetterButton = $("#die_button");
