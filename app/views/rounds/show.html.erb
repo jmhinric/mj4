@@ -5,7 +5,7 @@
     <% n = 1 %>
     <% @round.category_list.sample.each do |category| %>
       <label class="answer-label" id="slot-<%= n %>" ><%= category %>
-        <input class="playcard" id="answer-<%= n %>" name="<%= n %>" type="text">
+        <input class="playcard" id="answer-<%= n %>" name="<%= n %>" type="text" disabled="disabled">
       </label><br/>
       <% n+= 1 %>
     <% end %>
