@@ -31,17 +31,28 @@ $(document).ready(function () {
     }
   }
 
+  function timeUp() {
+    clearInterval(intervalId);
+    $("header").text("Time's Up!!!");
+    $(".playcard").attr("disabled", "disabled");
+    $("<h3>").text("Score: " + score).appendTo(".score");
+    usersJudgeAnswers();
+    finishScoring();
+  }
+
   function usersJudgeAnswers() {
 
     for(var i = 1; i < 13; i++) {
       var button = $("<button>").text("Reject");
+      button.addClass("reject-button");
       button.attr("id", "reject-" + i);
 
       var id = "#slot-" + i;
       button.appendTo(id); 
       
       $(button).one("click", function() {
-        score --;
+        updateScore();
+
         $(this).css("background", "red");
         $(this).siblings().css("text-decoration", "line-through");
         $(this).siblings().css("background", "lightgray");
@@ -71,6 +82,31 @@ $(document).ready(function () {
   }
 
   var randomLetterButton = $("#die_button");
+
+  function updateScore() {
+    score--;
+    $(".score h3").text("Score: " + score);
+  }
+
+  function finishScoring() {
+    var finishButton = $("<button id='submit-scores'>");
+    finishButton.addClass("finish-button");
+    finishButton.text("Finished Scoring");
+    finishButton.one("click", endGame);
+    finishButton.appendTo(".score");
+
+  }
+
+  function endGame() {
+    $("<h1>").text("Game Over!").appendTo(".score");
+    $("<h2>").text("Final Score: " + score).appendTo(".score");
+    $(".reject-button").attr("disabled", true);
+    $(".finish-button").remove();
+    $(".score h3").remove();
+  }
+
+
+  var buttonPress = $("#die_button");
 
   randomLetterButton.on("click", function() {
     var letter = $.ajax({
