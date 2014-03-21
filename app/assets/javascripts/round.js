@@ -71,9 +71,18 @@ $(document).ready(function () {
     }
   }
 
+  var buttonPress = $("#die_button");
 
+  buttonPress.on("click", function() {
+    var letter = $.ajax({
+      dataType: "json",
+      url: "letter",
+      success: function(success) {
+        $("#roll_result").text(success.letter);
+      }
+    });
 
-
-
+    buttonPress.attr("disabled", true);
+  });
 
 });
