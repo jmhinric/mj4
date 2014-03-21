@@ -1,11 +1,11 @@
 <div class="page-wrapper">
   <header>Welcome to Scattergories</header>
   <!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
-  <div class="playcard">
+  <div class="playcards">
     <% n = 1 %>
-    <% @game.category_list[:list_one].each do |category| %>
-      <label class="answer-label"><%= category %>
-        <input class="playcard" id="slot_<%= n %>" type="text">
+    <% @game.category_list.sample.each do |category| %>
+      <label class="answer-label" id="slot-<%= n %>" ><%= category %>
+        <input class="playcard" id="answer-<%= n %>" type="text">
       </label><br/>
       <% n+= 1 %>
     <% end %>

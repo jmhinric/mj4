@@ -11,7 +11,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find_by_id(params[:id])
-    @category_lists = @game.category_list[:list_one]
+    @category_lists = @game.category_list
   end
 
   def get_letter
