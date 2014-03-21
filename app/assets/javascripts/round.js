@@ -50,14 +50,11 @@ $(document).ready(function () {
       button.appendTo(id); 
       
       $(button).on("click", function() {
-        
-        $(this).toggleClass("rejected");
-        $(this).siblings().toggleClass("rejected");
-        
-        
+        $(this).toggleClass("rejected-button");
+        $(this).siblings().toggleClass("rejected-input");
+        updateScore();
       });
     }
-    updateScore();
     finishScoring();
   }
 
@@ -65,14 +62,15 @@ $(document).ready(function () {
     for(var i = 1; i < 13; i++) {
       var randomLetter = $("#roll_result").text();
       if ( $('#answer-' + i).val() == "" ) {
-        $('#reject-' + i).addClass("rejected");
-        $('#reject-' + i).siblings().addClass("rejected");
+        $('#reject-' + i).addClass("rejected-button");
+        $('#reject-' + i).siblings().addClass("rejected-input");
         $('#reject-' + i).attr("disabled", "disabled");
       } else if ( $('#answer-' + i).val().charAt(0) !== randomLetter ) {
-        $('#reject-' + i).addClass("rejected");
-        $('#reject-' + i).siblings().addClass("rejected");
+        $('#reject-' + i).addClass("rejected-button");
+        $('#reject-' + i).siblings().addClass("rejected-input");
         $('#reject-' + i).attr("disabled", "disabled");
       }
+      updateScore();
     }
   }
 
@@ -87,8 +85,8 @@ $(document).ready(function () {
   var randomLetterButton = $("#die_button");
 
   function updateScore() {
-    var rejected = $(".rejected");
-    return score = score - rejected.length;
+    var rejected = $(".rejected-button").length;
+    finalScore = 12 - rejected;
 
   }
 
@@ -103,7 +101,7 @@ $(document).ready(function () {
 
   function endGame() {
     $("<h1>").text("Game Over!").appendTo(".score");
-    $("<h2>").text("Final Score: " + score).appendTo(".score");
+    $("<h2>").text("Final Score: " + finalScore).appendTo(".score");
     $(".reject-button").attr("disabled", true);
     $(".finish-button").remove();
     $(".score h3").remove();

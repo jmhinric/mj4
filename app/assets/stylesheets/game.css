@@ -29,11 +29,11 @@
 	margin: 50px;
 }
 
-button.rejected {
+.rejected-button {
 	background-color: red;
 }
 
-input.rejected {
+.rejected-input {
 	text-decoration: line-through;
 	background-color: lightgray;
 }
