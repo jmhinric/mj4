@@ -35,6 +35,7 @@ $(document).ready(function () {
     clearInterval(intervalId);
     $("header").text("Time's Up!!!");
     $(".playcard").attr("disabled", "disabled");
+    $("<h3>").text("Score: " + score).appendTo(".score");
     usersJudgeAnswers();
   }
 
@@ -47,11 +48,18 @@ $(document).ready(function () {
       button.appendTo(id);
       
       $(button).one("click", function() {
-        score --;
+        updateScore();
+
         $(this).css("background", "red");
         $(this).siblings().css("text-decoration", "line-through");
       });
     }
+  }
+
+  function updateScore() {
+    score--;
+    $(".score h3").text("Score: " + score);
+
   }
 
   var buttonPress = $("#die_button");
