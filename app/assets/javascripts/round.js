@@ -32,7 +32,11 @@ $(document).ready(function () {
   var intervalId;
   var time = 6;
   var score = 12;
+<<<<<<< HEAD
   var letterSelected = false;
+=======
+  var answerPoints = [];
+>>>>>>> master
   // var categoryLists = {};
   // categoryLists["listOne"] = ["A boy's name", "A river", "An animal", "Things that are cold", "Insects", "TV Shows", "Things that grow", "Fruits", "Things that are black", "School subjects", "Movie Titles", "Musical Instruments"];
 
@@ -90,11 +94,16 @@ $(document).ready(function () {
         $('#reject-' + i).addClass("rejected-button");
         $('#reject-' + i).siblings().addClass("rejected-input");
         $('#reject-' + i).attr("disabled", "disabled");
-      } else if ( $('#answer-' + i).val().charAt(0) !== randomLetter ) {
+        answerPoints[i - 1] = 0;
+      } else if ( $('#answer-' + i).val().charAt(0).toLowerCase() !== randomLetter ) {
         $('#reject-' + i).addClass("rejected-button");
         $('#reject-' + i).siblings().addClass("rejected-input");
         $('#reject-' + i).attr("disabled", "disabled");
+        answerPoints[i - 1] = 0;
+      } else {
+        answerPoints[i - 1] = 1;
       }
+
       updateScore();
     }
   }
