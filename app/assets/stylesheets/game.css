@@ -1,0 +1,30 @@
+.playcards {
+	display: inline-block;
+}
+
+.game-controls {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+	margin: 0px 25px 0px 100px;
+}
+
+.die {
+	margin: 10px 50px;
+}
+
+.roll_result {
+	margin: 50px;
+}
+
+.next-round-button {
+	margin: 50px;
+}
+
+.timer {
+	margin: 50px;
+}
+
+.score {
+	margin: 50px;
+}
