@@ -37,7 +37,6 @@ $(document).ready(function () {
     $(".playcard").attr("disabled", "disabled");
     $("<h3>").text("Score: " + score).appendTo(".score");
     usersJudgeAnswers();
-    finishScoring();
   }
 
   function usersJudgeAnswers() {
@@ -50,25 +49,29 @@ $(document).ready(function () {
       var id = "#slot-" + i;
       button.appendTo(id); 
       
-      $(button).one("click", function() {
-        updateScore();
-
-        $(this).css("background", "red");
-        $(this).siblings().css("text-decoration", "line-through");
-        $(this).siblings().css("background", "lightgray");
+      $(button).on("click", function() {
+        
+        $(this).toggleClass("rejected");
+        $(this).siblings().toggleClass("rejected");
+        
+        
       });
     }
+    updateScore();
+    finishScoring();
   }
 
   function rejectBadAnswers() {
     for(var i = 1; i < 13; i++) {
       var randomLetter = $("#roll_result").text();
       if ( $('#answer-' + i).val() == "" ) {
-        $('#reject-' + i).css("background", "red");
-        $('#reject-' + i).siblings().css("background", "lightgray");
+        $('#reject-' + i).addClass("rejected");
+        $('#reject-' + i).siblings().addClass("rejected");
+        $('#reject-' + i).attr("disabled", "disabled");
       } else if ( $('#answer-' + i).val().charAt(0) !== randomLetter ) {
-        $('#reject-' + i).css("background", "red");
-        $('#reject-' + i).siblings().css("background", "lightgray");
+        $('#reject-' + i).addClass("rejected");
+        $('#reject-' + i).siblings().addClass("rejected");
+        $('#reject-' + i).attr("disabled", "disabled");
       }
     }
   }
@@ -84,8 +87,9 @@ $(document).ready(function () {
   var randomLetterButton = $("#die_button");
 
   function updateScore() {
-    score--;
-    $(".score h3").text("Score: " + score);
+    var rejected = $(".rejected");
+    return score = score - rejected.length;
+
   }
 
   function finishScoring() {
