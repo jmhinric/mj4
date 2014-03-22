@@ -3,8 +3,9 @@
   <!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
   <div class="playcards">
     <% n = 1 %>
-    <% @round.category_list.sample.each do |category| %>
-      <label class="answer-label" id="slot-<%= n %>" ><%= category %>
+
+    <% $redis.smembers(@game_category).each do |category_item| %>
+      <label class="answer-label" id="slot-<%= n %>" ><%= category_item %>
         <input class="playcard" id="answer-<%= n %>" name="<%= n %>" type="text" disabled="disabled">
       </label><br/>
       <% n+= 1 %>
