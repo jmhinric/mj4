@@ -1,9 +1,48 @@
+
 function Round(){
   this.letter = "";
+  this.answers = [];
+  this.answersObject = {};
+  this.scores = [];
 }
 
-Round.prototype.setLetter = function( letter ){
-  this.letter = letter;
+Round.prototype.setLetter = function( ){
+  $.ajax({
+    dataType: "json",
+    url: "letter",
+    data: {id: window.location.pathname.replace("/rounds/", "")},
+    success: function(success) {
+      $("#roll_result").text(success.letter);
+      round.letter = success.letter;
+    }
+  });
+};
+
+// Function to take the User's answers and:
+//    1)  Score blank answers as 0
+//    2)  Score answers that don't start with the proper letter as 0
+Round.prototype.autoRejectAnswers = function() {
+  $.ajax({
+    dataType: "json",
+    url: "auto_reject",
+    data: {answers: this.answersObject, id: window.location.pathname.replace("/rounds/", "")},
+    success: function(success) {
+      console.log(success);
+      for (var j = 0; j < 12; j++) {
+        round.scores[j] = success["scores"][j];
+      }
+    }
+  });
+};
+
+// Function to take the User's answers from the input fields and store them in the Round constructor function's answers array
+Round.prototype.getAnswers = function() {
+  for(var i = 0; i < 12; i++) {
+    this.answers.push($('#answer-' + (i+1)).val());
+    this.answersObject[i] = $('#answer-' + (i+1)).val();
+  }
+  console.log(this.answers);
+  console.log(this.answersObject);
 };
 
 
@@ -27,13 +66,13 @@ Round.prototype.setLetter = function( letter ){
 
 
 
-
 $(document).ready(function () {
+
   var intervalId;
   var time = 6;
   var score = 12;
-  var letterSelected = false;
   var answerPoints = [];
+  round = new Round();
 
   // var categoryLists = {};
   // categoryLists["listOne"] = ["A boy's name", "A river", "An animal", "Things that are cold", "Insects", "TV Shows", "Things that grow", "Fruits", "Things that are black", "School subjects", "Movie Titles", "Musical Instruments"];
@@ -46,6 +85,27 @@ $(document).ready(function () {
   //   });
   // }
   // createCategories();
+
+  // var buttonPress = $("#die_button");
+  var randomLetterButton = $("#die_button");
+
+  randomLetterButton.on("click", function() {
+    timer.attr("disabled", false);
+    randomLetterButton.attr("disabled", true);
+    round.setLetter();
+    // var letter = $.ajax({
+    //   dataType: "json",
+    //   url: "letter",
+    //   data: {id: window.location.pathname.replace("/rounds/", "")},
+    //   success: function(success) {
+    //     $("#roll_result").text(success.letter);
+    //     round.letter = success.letter;
+    //   }
+    // });
+
+  });
+
+
   var timer = $(".timer button");
   timer.attr("disabled", true);
   timer.one("click", function() {
@@ -64,6 +124,16 @@ $(document).ready(function () {
     } else {
       timer.text(":" + time);
     }
+  }
+
+  function timeUp() {
+    clearInterval(intervalId);
+    $("header").text("Time's Up!!!");
+    $(".playcard").attr("disabled", "disabled");
+    round.getAnswers();
+    round.autoRejectAnswers();
+    usersJudgeAnswers();
+    rejectBadAnswers();
   }
 
   function usersJudgeAnswers() {
@@ -85,6 +155,8 @@ $(document).ready(function () {
     finishScoring();
   }
 
+
+// Use some logic and code from this function for the Ruby Round class auto_reject method
   function rejectBadAnswers() {
     for(var i = 1; i < 13; i++) {
       var randomLetter = $("#roll_result").text();
@@ -106,16 +178,7 @@ $(document).ready(function () {
     }
   }
 
-  function timeUp() {
-    clearInterval(intervalId);
-    $("header").text("Time's Up!!!");
-    $(".playcard").attr("disabled", "disabled");
-    usersJudgeAnswers();
-    rejectBadAnswers();
-  }
-
-
-  var randomLetterButton = $("#die_button");
+ 
 
   function updateScore() {
     var rejected = $(".rejected-button").length;
@@ -141,19 +204,7 @@ $(document).ready(function () {
   }
 
 
-  var buttonPress = $("#die_button");
+  
 
-  randomLetterButton.on("click", function() {
-    timer.attr("disabled", false);
-    var letter = $.ajax({
-      dataType: "json",
-      url: "letter",
-      success: function(success) {
-        $("#roll_result").text(success.letter);
-      }
-    });
-
-    randomLetterButton.attr("disabled", true);
-  });
 
 });
