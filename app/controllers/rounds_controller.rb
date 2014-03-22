@@ -10,13 +10,12 @@ class RoundsController < ApplicationController
   def create
     @round = Round.create
     @round.after_initialize
-    # binding.pry
     redirect_to round_path(@round)
   end
 
   def show
     @round = Round.find(params[:id])
-    @category_lists = @round.category_list
+    @game_category = @round.pick_category
   end
 
   def get_letter
