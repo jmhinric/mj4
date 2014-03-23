@@ -1,10 +1,10 @@
 function Round(categoryList){
-  this.letter = "";
   // if (category === undefined) {
   //   throw "No category error.";
   // }
+  this.letter = "";
   this.categoryList = categoryList;
-  this.timeLeft = 60;
+  this.timeLeft = 6;
   this.answers = [];
   this.answersObject = {};
   this.scores = [];
@@ -18,14 +18,31 @@ Round.prototype.setRoundLetter = function(letter){
 };
 
 Round.prototype.startTimer = function(){
-  var tick = function(){console.log(this); this.timeLeft--;};
+  if (this.letter === "") {
+    throw "First you need a letter to play.";
+  }
+  var tick = function(){
+    this.timeLeft--;
+    if (this.timeLeft === 0) {
+      clearInterval(intervalId);
+      // this.timeUp();
+    }
+    console.log(this);
+
+  };
   tick = tick.bind(this);
-  setInterval(tick,1000);
+  var intervalId = setInterval(tick, 1000);
 };
 
+Round.prototype.submitAnswer = function(answerNumber, answerText) {
+  this.answers[answerNumber-1] = answerText;
+};
 
-
-
+Round.prototype.scoreAnswer = function(answerNumber, answerText) {
+  if (answerText === "") {
+    this.scores[answerNumber-1] = 0;
+  }
+};
 
 
 // Function to take the User's answers from the input fields and store them in the Round constructor function's answers array
