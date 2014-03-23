@@ -38,7 +38,11 @@ Round.prototype.submitAnswer = function(answerNumber, answerText) {
   this.answers[answerNumber-1] = answerText;
 };
 
-
+Round.prototype.scoreAnswer = function(answerNumber, answerText) {
+  if (answerText === "") {
+    this.scores[answerNumber-1] = 0;
+  }
+};
 
 
 // Function to take the User's answers from the input fields and store them in the Round constructor function's answers array

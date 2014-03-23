@@ -1,30 +1,28 @@
 $(document).ready(function(){
-  var categoryList;
-
-
+  var round;
   getCategory();
-  var round = new Round(categoryList);
-  render();
+  
 
   function render() {
-    $("<p>").text(round.categoryList[0]).appendTo(".playcards");
-
-    
+    var n = 0;
+    $.each(round.categoryList, function(index, category) {
+      $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
+      $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
+      $("<br>").appendTo(".playcards");
+      n++;
+    });
   }
 
-
-
-  var letter;
-  setLetter();
-  round.setRoundLetter(letter);
-
+  round.setRoundLetter(success.letter);
+  
   function getCategory(){
     $.ajax({
       dataType: "json",
       url: "category",
       data: {id: window.location.pathname.replace("/rounds/", "")},
       success: function(success) {
-        categoryList = success.category_list;
+        round = new Round(success.category_list);
+        render();
       }
     });
   }

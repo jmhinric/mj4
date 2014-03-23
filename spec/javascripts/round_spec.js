@@ -65,7 +65,7 @@ describe("Round", function(){
 
   });
 
-  describe("#submitAnswer", function() {
+  describe("Scoring answers", function() {
     beforeEach(function(){
       round.timeLeft = 60;
       jasmine.clock().install();
@@ -78,9 +78,19 @@ describe("Round", function(){
       jasmine.clock().uninstall();
     });
 
-    it("takes answers for category questions", function() {
-      round.submitAnswer(1, "anchor");
-      expect(round.answers[0]).toBe("anchor");
+    describe("#submitAnswer", function() {
+      it("takes answers for category questions", function() {
+        round.submitAnswer(1, "anchor");
+        expect(round.answers[0]).toBe("anchor");
+      });
+    });
+
+    describe("#scoreAnswer", function() {
+      it("scores an answer as 0 if it is blank", function() {
+        round.submitAnswer(1, "");
+        round.scoreAnswer(1, round.answers[0]);
+        expect(round.scores[0]).toBe(0);
+      });
     });
   });
   
