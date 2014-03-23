@@ -1,19 +1,53 @@
 $(document).ready(function(){
   var round;
   getCategory();
+
+  var intervalId;
+  // var time = 6;
+  // var score = 12;
+  // var answerPoints = [];
+  timer = $(".timer button"); 
   
 
   function render() {
     var n = 0;
-    $.each(round.categoryList, function(index, category) {
-      $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
-      $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
-      $("<br>").appendTo(".playcards");
-      n++;
-    });
-  }
 
-  round.setRoundLetter(success.letter);
+    if (round.letter === "") {
+      $.each(round.categoryList, function(index, category) {
+        $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
+        $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
+        $("<br>").appendTo(".playcards");
+        n++;
+      });
+
+      timer.attr("disabled", true);
+
+      $("#die_button").on("click", function() {
+        setLetter();
+        // $("#die_button").attr("disabled", true);
+      });
+    } else {
+      $("#die_button").attr("disabled", true);
+    };
+
+    //timer
+    if (round.timerStarted === false) {
+      
+      console.log("first");
+      timer.one("click", function() {
+        console.log("second");
+        $(".playcard").attr('disabled', false);
+        intervalId = setInterval(countDown, 1000);
+        // round.startTimer();
+      });
+    } else {
+      console.log("else")
+    }
+
+    if (round.timeLeft === 0) {
+      timeUp();
+    }
+  }
   
   function getCategory(){
     $.ajax({
@@ -36,50 +70,33 @@ $(document).ready(function(){
         $(".timer button").attr("disabled", false);
         $("#die_button").attr("disabled", true);
         $("#roll_result").text(success.letter);
-        letter = success.letter;
+        round.setRoundLetter(success.letter);
       }
     });
   }
 
-  // var intervalId;
-  // var time = 6;
-  // var score = 12;
-  // var answerPoints = [];
-  
 
-  // var randomLetterButton = $("#die_button");
-  // randomLetterButton.on("click", function() {
-  //   round.setLetter();
-  // });
-
-
-  // var timer = $(".timer button");
-  // timer.attr("disabled", true);
-  // timer.one("click", function() {
-  //   $(".playcard").removeAttr('disabled');
-  //   intervalId = setInterval(countDown, 1000);
-  // });
-
-  // function countDown() {
-  //   time -= 1;
+  function countDown() {
+    round.timeLeft -= 1;
+    console.log(round.timeLeft);
     
-  //   if (time === 0) {
-  //     timer.text(":0" + time);
-  //     timeUp();
-  //   } else if(time < 10) {
-  //     timer.text(":0" + time);
-  //   } else {
-  //     timer.text(":" + time);
-  //   }
-  // }
+    if (round.timeLeft === 0) {
+      timer.text(":0" + round.timeLeft);
+      render();
+    } else if(round.timeLeft < 10) {
+      timer.text(":0" + round.timeLeft);
+    } else {
+      timer.text(":" + round.timeLeft);
+    }
+  }
 
-  // function timeUp() {
-  //   clearInterval(intervalId);
-  //   $("header").text("Time's Up!!!");
-  //   $(".playcard").attr("disabled", "disabled");
-  //   round.getAnswers();
-  //   round.autoRejectAnswers();
-  // }
+  function timeUp() {
+    clearInterval(intervalId);
+    $("header").text("Time's Up!!!");
+    $(".playcard").attr("disabled", "disabled");
+    round.getAnswers();
+    round.autoRejectAnswers();
+  }
 
   
 
