@@ -1,7 +1,9 @@
 $(document).ready(function(){
-  var category = getCategory();
-  var round = new Round(category);
-  var letter = setLetter();
+  var categoryList;
+  getCategory();
+  var round = new Round(categoryList);
+  var letter;
+  setLetter();
   round.setRoundLetter(letter);
 
   function getCategory(){
@@ -10,9 +12,7 @@ $(document).ready(function(){
       url: "category",
       data: {id: window.location.pathname.replace("/rounds/", "")},
       success: function(success) {
-        console.log(success);
-        // return success.category;
-        // return success["category"];
+        categoryList = success.category_list;
       }
     });
   }
@@ -26,7 +26,7 @@ $(document).ready(function(){
         $(".timer button").attr("disabled", false);
         $("#die_button").attr("disabled", true);
         $("#roll_result").text(success.letter);
-        return success.letter;
+        letter = success.letter;
       }
     });
   }
