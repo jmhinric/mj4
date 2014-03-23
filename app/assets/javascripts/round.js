@@ -12,15 +12,21 @@ function Round(categoryList){
   this.finalScore = 0;
 }
 
+
+Round.prototype.setRoundLetter = function(letter){
+  this.letter = letter;
+};
+
 Round.prototype.startTimer = function(){
   var tick = function(){console.log(this); this.timeLeft--;};
   tick = tick.bind(this);
   setInterval(tick,1000);
 };
 
-Round.prototype.setRoundLetter = function(letter){
-  this.letter = letter;
-};
+
+
+
+
 
 // Function to take the User's answers from the input fields and store them in the Round constructor function's answers array
 Round.prototype.getAnswers = function() {

@@ -2,6 +2,16 @@ $(document).ready(function(){
   var categoryList;
   getCategory();
   var round = new Round(categoryList);
+  render();
+
+  function render() {
+    
+
+    
+  }
+
+
+
   var letter;
   setLetter();
   round.setRoundLetter(letter);
