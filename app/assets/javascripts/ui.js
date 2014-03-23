@@ -6,41 +6,46 @@ $(document).ready(function(){
   // var time = 6;
   // var score = 12;
   // var answerPoints = [];
+  timer = $(".timer button"); 
   
 
   function render() {
     var n = 0;
-    var timer = $(".timer button"); 
-    $.each(round.categoryList, function(index, category) {
-      $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
-      $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
-      $("<br>").appendTo(".playcards");
-      n++;
-    });
 
     if (round.letter === "") {
+      $.each(round.categoryList, function(index, category) {
+        $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
+        $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
+        $("<br>").appendTo(".playcards");
+        n++;
+      });
+
       timer.attr("disabled", true);
 
       $("#die_button").on("click", function() {
         setLetter();
-        $("#die_button").attr("disabled", true);
+        // $("#die_button").attr("disabled", true);
       });
     } else {
       $("#die_button").attr("disabled", true);
     };
 
     //timer
-    if (round.timerStarted == false) {
-      timer.attr("disabled", false);
+    if (round.timerStarted === false) {
+      
       console.log("first");
       timer.one("click", function() {
-        console.log("second")
-        // $(".playcard").removeAttr('disabled');
-        // intervalId = setInterval(countDown(), 1000);
-        // round.startLeft();
+        console.log("second");
+        $(".playcard").attr('disabled', false);
+        intervalId = setInterval(countDown, 1000);
+        // round.startTimer();
       });
     } else {
       console.log("else")
+    }
+
+    if (round.timeLeft === 0) {
+      timeUp();
     }
   }
   
@@ -73,10 +78,11 @@ $(document).ready(function(){
 
   function countDown() {
     round.timeLeft -= 1;
+    console.log(round.timeLeft);
     
     if (round.timeLeft === 0) {
       timer.text(":0" + round.timeLeft);
-      // timeUp();
+      render();
     } else if(round.timeLeft < 10) {
       timer.text(":0" + round.timeLeft);
     } else {
