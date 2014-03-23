@@ -1,10 +1,10 @@
 function Round(categoryList){
-  this.letter = "";
   // if (category === undefined) {
   //   throw "No category error.";
   // }
+  this.letter = "";
   this.categoryList = categoryList;
-  this.timeLeft = 60;
+  this.timeLeft = 6;
   this.answers = [];
   this.answersObject = {};
   this.scores = [];
@@ -18,9 +18,20 @@ Round.prototype.setRoundLetter = function(letter){
 };
 
 Round.prototype.startTimer = function(){
-  var tick = function(){console.log(this); this.timeLeft--;};
+  if (this.letter === "") {
+    throw "First you need a letter to play.";
+  }
+  var tick = function(){
+    this.timeLeft--;
+    if (this.timeLeft === 0) {
+      clearInterval(intervalId);
+      // this.timeUp();
+    }
+    console.log(this);
+
+  };
   tick = tick.bind(this);
-  setInterval(tick,1000);
+  var intervalId = setInterval(tick, 1000);
 };
 
 

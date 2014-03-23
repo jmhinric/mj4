@@ -3,19 +3,22 @@ describe("Round", function(){
   // a score (for the round)
   // answers
   // category lists
+  var round;
+  var roundCategoryList
 
   beforeEach(function() {
-    round = new Round();
-  });
-
-  describe("#initialize", function(){
-    it("creates a new round with a 'category'", function(){
-      roundCategoryList = ["Nicknames","Things in the Sky","Pizza toppings",
+    roundCategoryList = ["Nicknames","Things in the Sky","Pizza toppings",
                   "Colleges/Universities","Fish","Countries",
                   "Things that have spots","Historical Figures",
                   "Something You're Afraid Of","Terms of Endearment",
                   "Items in This Room","Drugs that are abused"];
-      var round = new Round(roundCategoryList);
+    round = new Round(roundCategoryList);
+    // round = new Round();
+  });
+
+  describe("#initialize", function(){
+    it("creates a new round with a 'category'", function(){
+      
       expect(round.categoryList).toBe(roundCategoryList);
     });
     xit("throws an error when there is no category", function(){
@@ -32,35 +35,34 @@ describe("Round", function(){
   });
 
   describe("#startTimer",function(){
-    var category;
-    var round;
+    // var category;
+    // var round;
 
     beforeEach(function(){
-      category = ["Nicknames","Things in the Sky","Pizza toppings",
-                  "Colleges/Universities","Fish","Countries",
-                  "Things that have spots","Historical Figures",
-                  "Something You're Afraid Of","Terms of Endearment",
-                  "Items in This Room","Drugs that are abused"];
-      round = new Round(category);
-      round.letter = "C";
-
+      round.timeLeft = 60;
       jasmine.clock().install();
     });
 
     afterEach(function(){
       jasmine.clock().uninstall();
     });
-    
+
+    it("can't be called unless a letter has been chosen", function() {
+      expect(function(){round.startTimer();}).toThrow("First you need a letter to play.");
+    });
     it("decrements timeOut by one second every 1000 milliseconds", function(){
+      round.setRoundLetter("a");
       round.startTimer();
       jasmine.clock().tick(3001);
       expect(round.timeLeft).toBe(57);
     });
-    it("stops after 60 seconds", function(){
+    xit("stops after 60 seconds", function(){
+      round.setRoundLetter("a");
       round.startTimer();
-      jasmine.clock().tick(62000);
+      jasmine.clock().tick(63000);
       expect(round.timeLeft).toBe(0);
     });
+
   });
 
   
