@@ -94,14 +94,25 @@ $(document).ready(function () {
 });
 
 
-function Round(){
+function Round(category){
   this.letter = "";
+  // if (category === undefined) {
+  //   throw "No category error.";
+  // }
+  this.category = category;
+  this.timeLeft = 60;
   this.answers = [];
   this.answersObject = {};
   this.scores = [];
   this.scoresObject = {};
   this.finalScore = 0;
 }
+
+Round.prototype.startTimer = function(){
+  var tick = function(){console.log(this); this.timeLeft--;};
+  tick = tick.bind(this);
+  setInterval(tick,1000);
+};
 
 Round.prototype.setLetter = function( ){
   $.ajax({
