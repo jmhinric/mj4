@@ -50,6 +50,7 @@ describe("Round", function(){
     afterEach(function(){
       jasmine.clock().uninstall();
     });
+    
     it("decrements timeOut by one second every 1000 milliseconds", function(){
       round.startTimer();
       jasmine.clock().tick(3001);
