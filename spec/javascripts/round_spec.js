@@ -4,16 +4,12 @@ describe("Round", function(){
   // answers
   // category lists
   var round;
-  var roundCategoryList
+  var roundCategoryList;
 
   beforeEach(function() {
-    roundCategoryList = ["Nicknames","Things in the Sky","Pizza toppings",
-                  "Colleges/Universities","Fish","Countries",
-                  "Things that have spots","Historical Figures",
-                  "Something You're Afraid Of","Terms of Endearment",
-                  "Items in This Room","Drugs that are abused"];
+    roundCategoryList = [
+      "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
     round = new Round(roundCategoryList);
-    // round = new Round();
   });
 
   describe("#initialize", function(){
@@ -32,11 +28,13 @@ describe("Round", function(){
       round.setRoundLetter("A");
       expect(round.letter).toBe("A");
     });
+    it("can't be called more than once", function() {
+      round.setRoundLetter("a");
+      expect(function(){round.setLetter("b");}).toThrow("Letter already set.");
+    });
   });
 
   describe("#startTimer",function(){
-    // var category;
-    // var round;
 
     beforeEach(function(){
       round.timeLeft = 60;
@@ -63,6 +61,12 @@ describe("Round", function(){
       expect(round.timeLeft).toBe(0);
     });
 
+    it("can't be called more than once", function() {
+      round.setRoundLetter("a");
+      round.startTimer();
+      expect(round.timerStarted).toBe(true);
+    });
+
   });
 
   describe("Scoring answers", function() {
@@ -80,34 +84,40 @@ describe("Round", function(){
 
     describe("#submitAnswer", function() {
       it("takes answers for category questions", function() {
-        round.submitAnswer(1, "anchor");
+        round.submitAnswer(0, "anchor");
         expect(round.answers[0]).toBe("anchor");
       });
     });
 
     describe("#autoRejectAnswer", function() {
       it("scores an answer as 0 if it is blank", function() {
-        round.submitAnswer(1, "");
-        round.autoRejectAnswer(1, round.answers[0]);
+        round.submitAnswer(0, "");
+        round.autoRejectAnswer(0, round.answers[0]);
         expect(round.scores[0]).toBe(0);
       });
 
       it("scores an answer as 0 if the first letter of the word is not the round's letter", function() {
-        round.submitAnswer(1, "maserati");
-        round.autoRejectAnswer(1, round.answers[0]);
+        round.submitAnswer(0, "maserati");
+        round.autoRejectAnswer(0, round.answers[0]);
         expect(round.scores[0]).toBe(0);
       });
 
       it("scores an answer as 1 if it begins with the round's letter", function() {
-        round.submitAnswer(1, "abacus");
-        round.autoRejectAnswer(1, round.answers[0]);
+        round.submitAnswer(0, "abacus");
+        round.autoRejectAnswer(0, round.answers[0]);
         expect(round.scores[0]).toBe(1);
       });
 
       it("doesn't let capitalization affect scoring", function() {
-        round.submitAnswer(1, "Abacus");
-        round.autoRejectAnswer(1, round.answers[0]);
+        round.submitAnswer(0, "Abacus");
+        round.autoRejectAnswer(0, round.answers[0]);
         expect(round.scores[0]).toBe(1);
+      });
+    });
+
+    describe("#scoreAnswer", function() {
+      it("scores an answer as 0 or 1", function() {
+        
       });
     });
   });

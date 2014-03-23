@@ -10,6 +10,7 @@ function Round(categoryList){
   this.scores = [];
   this.scoresObject = {};
   this.finalScore = 0;
+  this.timerStarted = false;
 }
 
 
@@ -21,6 +22,7 @@ Round.prototype.startTimer = function(){
   if (this.letter === "") {
     throw "First you need a letter to play.";
   }
+  this.timerStarted = true;
   var tick = function(){
     this.timeLeft--;
     if (this.timeLeft === 0) {
@@ -35,16 +37,16 @@ Round.prototype.startTimer = function(){
 };
 
 Round.prototype.submitAnswer = function(answerNumber, answerText) {
-  this.answers[answerNumber-1] = answerText;
+  this.answers[answerNumber] = answerText;
 };
 
 Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
   if (answerText === "") {
-    this.scores[answerNumber-1] = 0;
+    this.scores[answerNumber] = 0;
   } else if (answerText[0].toLowerCase() !== this.letter) {
-    this.scores[answerNumber-1] = 0;
+    this.scores[answerNumber] = 0;
   } else {
-    this.scores[answerNumber-1] = 1;
+    this.scores[answerNumber] = 1;
   }
 };
 
@@ -160,6 +162,22 @@ Round.prototype.setFinalScore = function() {
     }
   });
 };
+
+// $.ajax({
+  //   dataType: "json",
+  //   url: "auto_reject",
+  //   data: {answers: this.answersObject, id: window.location.pathname.replace("/rounds/", "")},
+  //   success: function(success) {
+  //     console.log(success);
+  //     for (var j = 0; j < 12; j++) {
+  //       round.scores[j] = success["scores"][j];
+  //     }
+  //     round.usersJudgeAnswers();
+  //     round.updateRejectedStyles();
+  //     round.finishScoring();
+  //     // rejectBadAnswers();
+  //   }
+  // });
 
 
 // Round.prototype.render = function(){
