@@ -30,7 +30,7 @@ describe("Round", function(){
     });
     it("can't be called more than once", function() {
       round.setRoundLetter("a");
-      expect(function(){round.setLetter("b");}).toThrow("Letter already set.");
+      expect(function(){round.setRoundLetter("b");}).toThrow("Letter already set.");
     });
   });
 
@@ -65,6 +65,7 @@ describe("Round", function(){
       round.setRoundLetter("a");
       round.startTimer();
       expect(round.timerStarted).toBe(true);
+      expect(function(){round.startTimer();}).toThrow("The timer has already been started.");
     });
 
   });
@@ -117,7 +118,17 @@ describe("Round", function(){
 
     describe("#scoreAnswer", function() {
       it("scores an answer as 0 or 1", function() {
-        
+        round.scores[0] = 1;
+        round.scoreAnswer(0,0);
+        expect(round.scores[0]).toBe(0);
+      });
+    });
+
+    describe("#sumFinalScore", function() {
+      it("sums up a player's finals score", function() {
+        round.scores = [0,1,1,1,0,0,0,0,0,0,0,1];
+        round.sumFinalScore();
+        expect(round.finalScore).toBe(4);
       });
     });
   });
