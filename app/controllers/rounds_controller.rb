@@ -29,7 +29,7 @@ class RoundsController < ApplicationController
   end
 
   def category
-    render json: {category: @round.pick_category}
+    render json: {category_list: @round.pick_category}
   end
 
 
