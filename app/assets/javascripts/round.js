@@ -15,25 +15,32 @@ function Round(categoryList){
 
 
 Round.prototype.setRoundLetter = function(letter){
-  this.letter = letter;
+  if (this.letter === "") {
+    this.letter = letter;
+  } else {
+    throw "Letter already set."
+  }
 };
 
 Round.prototype.startTimer = function(){
   if (this.letter === "") {
     throw "First you need a letter to play.";
-  }
-  this.timerStarted = true;
-  var tick = function(){
-    this.timeLeft--;
-    if (this.timeLeft === 0) {
-      clearInterval(intervalId);
-      // this.timeUp();
-    }
-    console.log(this);
+  } else if (this.timerStarted === true) {
+    throw "The timer has already been started.";
+  } else {
+    this.timerStarted = true;
+    var tick = function(){
+      this.timeLeft--;
+      if (this.timeLeft === 0) {
+        clearInterval(intervalId);
+        // this.timeUp();
+      }
+      console.log(this);
 
-  };
-  tick = tick.bind(this);
-  var intervalId = setInterval(tick, 1000);
+    };
+    tick = tick.bind(this);
+    var intervalId = setInterval(tick, 1000);
+  }
 };
 
 Round.prototype.submitAnswer = function(answerNumber, answerText) {
@@ -41,7 +48,7 @@ Round.prototype.submitAnswer = function(answerNumber, answerText) {
 };
 
 Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
-  if (answerText === "") {
+  if (answerText === "" || answerText === undefined) {
     this.scores[answerNumber] = 0;
   } else if (answerText[0].toLowerCase() !== this.letter) {
     this.scores[answerNumber] = 0;
@@ -49,6 +56,18 @@ Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
     this.scores[answerNumber] = 1;
   }
 };
+
+Round.prototype.scoreAnswer = function(answerNumber, score) {
+  this.scores[answerNumber] = score;
+};
+
+Round.prototype.sumFinalScore = function() {
+  for(var i = 0; i < 12; i++) {
+    this.finalScore += this.scores[i];
+  }
+};
+
+
 
 
 // Function to take the User's answers from the input fields and store them in the Round constructor function's answers array
