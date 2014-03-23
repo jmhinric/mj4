@@ -27,7 +27,7 @@ describe("Round", function(){
   
   });
 
-  describe("setRoundLetter", function(){
+  describe("#setRoundLetter", function(){
     it("stores a letter for the round", function(){
       round.setRoundLetter("A");
       expect(round.letter).toBe("A");
@@ -65,6 +65,24 @@ describe("Round", function(){
 
   });
 
+  describe("#submitAnswer", function() {
+    beforeEach(function(){
+      round.timeLeft = 60;
+      jasmine.clock().install();
+      round.setRoundLetter("a");
+      round.startTimer();
+      jasmine.clock().tick(60000);
+    });
+
+    afterEach(function(){
+      jasmine.clock().uninstall();
+    });
+
+    it("takes answers for category questions", function() {
+      round.submitAnswer(1, "anchor");
+      expect(round.answers[0]).toBe("anchor");
+    });
+  });
   
 
   

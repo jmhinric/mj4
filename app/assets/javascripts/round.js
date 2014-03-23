@@ -34,7 +34,9 @@ Round.prototype.startTimer = function(){
   var intervalId = setInterval(tick, 1000);
 };
 
-
+Round.prototype.submitAnswer = function(answerNumber, answerText) {
+  this.answers[answerNumber-1] = answerText;
+};
 
 
 

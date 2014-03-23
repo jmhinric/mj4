@@ -1,11 +1,13 @@
 $(document).ready(function(){
   var categoryList;
+
+
   getCategory();
   var round = new Round(categoryList);
   render();
 
   function render() {
-    
+    $("<p>").text(round.categoryList[0]).appendTo(".playcards");
 
     
   }
