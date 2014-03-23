@@ -38,9 +38,13 @@ Round.prototype.submitAnswer = function(answerNumber, answerText) {
   this.answers[answerNumber-1] = answerText;
 };
 
-Round.prototype.scoreAnswer = function(answerNumber, answerText) {
+Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
   if (answerText === "") {
     this.scores[answerNumber-1] = 0;
+  } else if (answerText[0].toLowerCase() !== this.letter) {
+    this.scores[answerNumber-1] = 0;
+  } else {
+    this.scores[answerNumber-1] = 1;
   }
 };
 

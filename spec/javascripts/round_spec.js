@@ -85,11 +85,29 @@ describe("Round", function(){
       });
     });
 
-    describe("#scoreAnswer", function() {
+    describe("#autoRejectAnswer", function() {
       it("scores an answer as 0 if it is blank", function() {
         round.submitAnswer(1, "");
-        round.scoreAnswer(1, round.answers[0]);
+        round.autoRejectAnswer(1, round.answers[0]);
         expect(round.scores[0]).toBe(0);
+      });
+
+      it("scores an answer as 0 if the first letter of the word is not the round's letter", function() {
+        round.submitAnswer(1, "maserati");
+        round.autoRejectAnswer(1, round.answers[0]);
+        expect(round.scores[0]).toBe(0);
+      });
+
+      it("scores an answer as 1 if it begins with the round's letter", function() {
+        round.submitAnswer(1, "abacus");
+        round.autoRejectAnswer(1, round.answers[0]);
+        expect(round.scores[0]).toBe(1);
+      });
+
+      it("doesn't let capitalization affect scoring", function() {
+        round.submitAnswer(1, "Abacus");
+        round.autoRejectAnswer(1, round.answers[0]);
+        expect(round.scores[0]).toBe(1);
       });
     });
   });
