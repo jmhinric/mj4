@@ -50,7 +50,7 @@ class Round < ActiveRecord::Base
   def pick_category
     @pick_category = $redis.smembers("all_categories").sample
     
-    return @pick_category
+    return $redis.smembers(@pick_category)
   end
 
   

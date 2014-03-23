@@ -4,21 +4,31 @@ describe("Round", function(){
   // answers
   // category lists
 
+  beforeEach(function() {
+    round = new Round();
+  });
 
   describe("#initialize", function(){
     it("creates a new round with a 'category'", function(){
-      category = ["Nicknames","Things in the Sky","Pizza toppings",
+      roundCategoryList = ["Nicknames","Things in the Sky","Pizza toppings",
                   "Colleges/Universities","Fish","Countries",
                   "Things that have spots","Historical Figures",
                   "Something You're Afraid Of","Terms of Endearment",
                   "Items in This Room","Drugs that are abused"];
-      round = new Round(category);
-      expect(round.category).toBe(category);
+      var round = new Round(roundCategoryList);
+      expect(round.categoryList).toBe(roundCategoryList);
     });
     xit("throws an error when there is no category", function(){
       expect(function(){round = new Round();}).toThrow("No category error.");
     });
   
+  });
+
+  describe("setRoundLetter", function(){
+    it("stores a letter for the round", function(){
+      round.setRoundLetter("A");
+      expect(round.letter).toBe("A");
+    });
   });
 
   describe("#startTimer",function(){
@@ -52,17 +62,9 @@ describe("Round", function(){
     });
   });
 
-  // beforeEach(function() {
-  //   round = new Round();
-  // });
+  
 
-  // describe("setLetter", function(){
-  //   it("stores a letter for the round", function(){
-  //     round.setLetter();
-  //     expect(round.letter).toBe("A");
-  //   });
-  // });
-
+  
   // // PJ: return to asynch later
   // xdescribe("autoRejectAnswers", function() {
   //   var value, async = new AsyncSpec(this);
