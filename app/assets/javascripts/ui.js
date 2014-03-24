@@ -12,7 +12,7 @@ $(document).ready(function(){
 
   function render() {
     
-
+    console.log("Player is: " + round.player)
     // When the game initializes
     if (round.letter === "") {
       renderPlaycard();
@@ -22,24 +22,21 @@ $(document).ready(function(){
 
       // Event listener for getting the round letter
       $("#die_button").on("click", function() {
-        // $("#die_button").attr("disabled", true);
         setLetter();
       });
 
       // First player has done the timer, second player needs to play
+      //Reset DOM & playcard for Player 1
     } else {
       round.timeLeft = 6;
       round.timerStarted = false;
       renderPlaycard();
-      render();
     }
 
     // Letter has been selected but timer hasn't started
     if (round.timerStarted === false) {
       
-      console.log("first");
       timer.one("click", function() {
-        console.log("second");
         $(".playcard").attr('disabled', false);
         intervalId = setInterval(countDown, 1000);
         // round.startTimer();
@@ -92,6 +89,7 @@ $(document).ready(function(){
       
       // Create input fields with event listeners
       var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>");
+      input.text("");
       
       // Event listener to record answers as they're typed
       input.on("keyup", function(e) {
@@ -124,11 +122,16 @@ $(document).ready(function(){
     round.timeLeft -= 1;
     console.log(round.timeLeft);
     
-    if (round.timeLeft === 0) {
+    if (round.timeLeft === 0 && round.player === 0) {
       timer.text(":0" + round.timeLeft);
-      
-      if (round.player === 0) { round.player = 1; }
+      round.player = 1;
+      timeUp();
+      $(".playcards").empty();
       render();
+    } else if (round.timeLeft === 0) {
+        timer.text(":0" + round.timeLeft);
+        timeUp();
+        render();
     } else if(round.timeLeft < 10) {
       timer.text(":0" + round.timeLeft);
     } else {
