@@ -1,6 +1,6 @@
 class RoundsController < ApplicationController
 
-  before_action :load_round, only: [:category, :get_letter, :auto_reject]
+  before_action :load_round, only: [:category, :get_letter, :auto_reject, :finalize_answers]
 
 
   def new
@@ -15,7 +15,6 @@ class RoundsController < ApplicationController
 
   def show
     @round = Round.find(params[:id])
-    # @game_category = @round.pick_category
   end
 
   def get_letter
@@ -25,6 +24,11 @@ class RoundsController < ApplicationController
 
   def auto_reject
     @scores = @round.auto_reject(params["answers"])
+    render json: {scores: @scores}
+  end
+
+  def finalize_answers
+    @scores = @round.finalize_answers(params["scores"])
     render json: {scores: @scores}
   end
 

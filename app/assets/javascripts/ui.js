@@ -15,7 +15,7 @@ $(document).ready(function(){
     // When the game initializes
     if (round.letter === "") {
 
-      // List out all the categories and add input tags
+      // List out all the categories and add inputs
       $.each(round.categoryList, function(index, category) {
         $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
         $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
@@ -33,9 +33,9 @@ $(document).ready(function(){
 
     } else {
       $("#die_button").attr("disabled", true);
-    };
+    }
 
-    // timer
+    // Letter has been selected but timer hasn't started
     if (round.timerStarted === false) {
       
       console.log("first");
@@ -49,12 +49,25 @@ $(document).ready(function(){
       console.log("else");
     }
 
-    // When the timer has run out:
+    // The timer has run out
     if (round.timeLeft === 0) {
+      timer.attr("disabled", true);
+      
+      // Stop the timer, show a message, disable inputs
       timeUp();
+      
+      // Store inputs in the round's answers
+      getAnswers();
+
+      // Ajax to auto-score blank answers or ones not starting with the round letter
+      autoRejectAnswers();
+
+      // Button for player to submit their answer rejections
+      finishScoringButton();
     }
   }
   
+  // Ajax to get the round's category
   function getCategory(){
     $.ajax({
       dataType: "json",
@@ -67,6 +80,7 @@ $(document).ready(function(){
     });
   }
 
+  // Ajax to get the round's letter
   function setLetter() {
     $.ajax({
       dataType: "json",
@@ -81,7 +95,7 @@ $(document).ready(function(){
     });
   }
 
-
+  // Decrement the timer and display the time
   function countDown() {
     round.timeLeft -= 1;
     console.log(round.timeLeft);
@@ -96,12 +110,11 @@ $(document).ready(function(){
     }
   }
 
+  // Stop the timer, display a message, disable the inputs
   function timeUp() {
     clearInterval(intervalId);
     $("header").text("Time's Up!!!");
     $(".playcard").attr("disabled", "disabled");
-    getAnswers();
-    autoRejectAnswers();
   }
 
   // Take the player's answers from the input fields and store them in the round's answers
@@ -111,9 +124,7 @@ $(document).ready(function(){
     }
   }
 
-  // Take the player's answers and:
-  //    1)  Score blank answers as 0
-  //    2)  Score answers that don't start with the round's letter as 0
+  // Ajax to auto-reject blank answers and those that don't begin with the round's letter
   function autoRejectAnswers() {
     $.ajax({
       dataType: "json",
@@ -121,23 +132,20 @@ $(document).ready(function(){
       data: {answers: round.answers, id: window.location.pathname.replace("/rounds/", "")},
       success: function(success) {
         for (var j = 0; j < 12; j++) {
+          // Update the JS model scores
           round.scores[j] = success["scores"][j];
         }
-        usersJudgeAnswers();
-          
+        addRejectButtons();
       }
-        // round.updateRejectedStyles();
-        // round.finishScoring();
-        // rejectBadAnswers();
-      // }
     });
-  };
+  }
 
 
   // Add reject buttons
-  function usersJudgeAnswers() {
+  function addRejectButtons() {
 
     for(var i = 0; i < 12; i++) {
+
       // Create buttons, add class and id
       var button = $("<button>").text("Reject");
       button.addClass("reject-button");
@@ -151,57 +159,66 @@ $(document).ready(function(){
         $(button).siblings().toggleClass("rejected-input");
       }
 
-      // Event listener for player rejecting an answer
+      // Add event listener for player rejecting an answer
       $(button).on("click", function() {
         $(this).toggleClass("rejected-button");
         $(this).siblings().toggleClass("rejected-input");
-        // updateScore();
       });
     }
-  };
+  }
 
-  // Add appropriate CSS styles to auto-rejected buttons and inputs before the User voting round
-  function updateRejectedStyles() {
-    for (var j = 0; j < 12; j++) {
-      // var buttonId = "#reject-" + (j+1);
-      // if(round.scores[j] === 0) {
-      //   $(buttonId).toggleClass("rejected-button");
-      //   $(buttonId).siblings().toggleClass("rejected-input");
-      // }
+  // Button for player to submit their rejected answers
+  function finishScoringButton() {
+    var finishButton = $("<button id='submit-scores'>");
+    finishButton.addClass("finish-button");
+    finishButton.text("Finished Scoring");
+    finishButton.one("click", submitFinalScores);
+    finishButton.appendTo(".score");
+  }
+
+  function submitFinalScores() {
+    getUserVotes();
+    setFinalScore();
+  }
+
+  // Collect scores from the user rejected answers
+  function getUserVotes() {
+    for(var i = 0; i < 12; i++) {
+      var buttonId = "#reject-" + i;
+      if($(buttonId).hasClass("rejected-button")) {
+        round.scoreAnswer(i,0);
+      } else {
+        round.scoreAnswer(i,1);
+      }
     }
-  };
+  }
 
+  // Ajax to send scores back to the server
+  function setFinalScore() {
+    $.ajax({
+      dataType: "json",
+      url: "finalize",
+      data: {scores: round.scores, id: window.location.pathname.replace("/rounds/", "")},
+      success: function(success) {
+        console.log(success);
+        for (var j = 0; j < 12; j++) {
+          round.scores[j] = success["scores"][j];
+        }
+        // Update the final score of the game
+        round.sumFinalScore();
+        
+        // Display the final score with game over message
+        endGameMessage();
+      }
+    });
+  }
 
-
-
-// Use some logic and code from this function for the Ruby Round class auto_reject method
-  // function rejectBadAnswers() {
-  //   for(var i = 1; i < 13; i++) {
-  //     var randomLetter = $("#roll_result").text();
-  //     if ( $('#answer-' + i).val() == "" ) {
-  //       $('#reject-' + i).addClass("rejected-button");
-  //       $('#reject-' + i).siblings().addClass("rejected-input");
-  //       $('#reject-' + i).attr("disabled", "disabled");
-  //       answerPoints[i - 1] = 0;
-  //     } else if ( $('#answer-' + i).val().charAt(0).toLowerCase() !== randomLetter ) {
-  //       $('#reject-' + i).addClass("rejected-button");
-  //       $('#reject-' + i).siblings().addClass("rejected-input");
-  //       $('#reject-' + i).attr("disabled", "disabled");
-  //       answerPoints[i - 1] = 0;
-  //     } else {
-  //       answerPoints[i - 1] = 1;
-  //     }
-
-  //     updateScore();
-  //   }
-  // }
-
- 
-
-  // function updateScore() {
-  //   var rejected = $(".rejected-button").length;
-  //   finalScore = 12 - rejected;
-
-  // }
+  function endGameMessage() {
+    $("<h1>").text("Game Over!").appendTo(".score");
+    $("<h2>").text("Final Score: " + round.finalScore).appendTo(".score");
+    $(".reject-button").attr("disabled", true);
+    $(".finish-button").remove();
+    $(".score h3").remove();
+  }
 
 });

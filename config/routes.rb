@@ -7,5 +7,7 @@ Scattergories::Application.routes.draw do
 
   get "rounds/auto_reject", to: "rounds#auto_reject"
 
+  get "rounds/finalize", to: "rounds#finalize_answers"
+
   resources :rounds, only: [:show, :create]
 end

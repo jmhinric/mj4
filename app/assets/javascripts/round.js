@@ -57,7 +57,7 @@ Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
   }
 };
 
-// Let the player score an answer as 0 or 1
+// Player scores an answer as 0 or 1
 Round.prototype.scoreAnswer = function(answerNumber, score) {
   if (score === 0 || score === 1) {
     this.scores[answerNumber] = score;
@@ -67,82 +67,9 @@ Round.prototype.scoreAnswer = function(answerNumber, score) {
 // Sum up the scores of individual answers to get the player's final score for the round
 Round.prototype.sumFinalScore = function() {
   for(var i = 0; i < 12; i++) {
-    this.finalScore += this.scores[i];
+    this.finalScore += parseInt(this.scores[i]);
   }
 };
-
-
-
-
-
-
-
-
-
-Round.prototype.finishScoring = function() {
-  var finishButton = $("<button id='submit-scores'>");
-  finishButton.addClass("finish-button");
-  finishButton.text("Finished Scoring");
-  finishButton.one("click", this.endGame);
-  finishButton.appendTo(".score");
-
-};
-
-Round.prototype.endGame = function() {
-  this.getUserVotes();
-  this.setFinalScore();
-  $("<h1>").text("Game Over!").appendTo(".score");
-  $("<h2>").text("Final Score: " + this.finalScore).appendTo(".score");
-  $(".reject-button").attr("disabled", true);
-  $(".finish-button").remove();
-  $(".score h3").remove();
-};
-
-// Function to see which answers the user rejected
-Round.prototype.getUserVotes = function() {
-  for(var i = 0; i < 12; i++) {
-    var buttonId = "#reject-" + i;
-    if($(buttonId).class === "rejected-button") {
-      this.scores[i] = 0;
-      this.scoresObject[i] = 0;
-    } else {
-      this.scores[i] = 1;
-      this.scoresObject[i] = 1;
-    }
-  }
-};
-
-Round.prototype.setFinalScore = function() {
-  $.ajax({
-    dataType: "json",
-    url: "auto_reject",
-    data: {answers: this.answersObject, id: window.location.pathname.replace("/rounds/", "")},
-    success: function(success) {
-      console.log(success);
-      for (var j = 0; j < 12; j++) {
-        round.scores[j] = success["scores"][j];
-      }
-      // round.usersJudgeAnswers();
-      // rejectBadAnswers();
-    }
-  });
-};
-
-// $.ajax({
-  //   dataType: "json",
-  //   url: "auto_reject",
-  //   data: {answers: this.answersObject, id: window.location.pathname.replace("/rounds/", "")},
-  //   success: function(success) {
-  //     console.log(success);
-  //     for (var j = 0; j < 12; j++) {
-  //       round.scores[j] = success["scores"][j];
-  //     }
-  //     round.usersJudgeAnswers();
-  //     round.updateRejectedStyles();
-  //     round.finishScoring();
-  //     // rejectBadAnswers();
-  //   }
-  // });
 
 
 // Round.prototype.render = function(){
