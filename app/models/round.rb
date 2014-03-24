@@ -29,17 +29,17 @@ class Round < ActiveRecord::Base
 
   def auto_reject(answers)
     self.after_initialize
-    (0..11).each do |key|
-      if answers[key.to_s] == "" || answers[key.to_s].first != $letter
-        self.set_scores(key, 0)
+    (0..11).each do |index|
+      if answers[index].to_s == "" || answers[index].to_s.first != $letter
+          self.set_score(index, 0)
       else
-        self.set_scores(key, 1)
+        self.set_score(index, 1)
       end
     end
     self.scores
   end
 
-  def set_scores(index, score)
+  def set_score(index, score)
     self.scores[index] = score
   end
 

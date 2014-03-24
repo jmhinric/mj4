@@ -122,6 +122,12 @@ describe("Round", function(){
         round.scoreAnswer(0,0);
         expect(round.scores[0]).toBe(0);
       });
+
+      it("doesn't score the answer if the score given is not 0 or 1", function() {
+        round.scores[0] = 1;
+        round.scoreAnswer(0,2);
+        expect(round.scores[0]).toBe(1);
+      });
     });
 
     describe("#sumFinalScore", function() {

@@ -18,7 +18,7 @@ Round.prototype.setRoundLetter = function(letter){
   if (this.letter === "") {
     this.letter = letter;
   } else {
-    throw "Letter already set."
+    throw "Letter already set.";
   }
 };
 
@@ -57,10 +57,14 @@ Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
   }
 };
 
+// Let the player score an answer as 0 or 1
 Round.prototype.scoreAnswer = function(answerNumber, score) {
-  this.scores[answerNumber] = score;
+  if (score === 0 || score === 1) {
+    this.scores[answerNumber] = score;
+  }
 };
 
+// Sum up the scores of individual answers to get the player's final score for the round
 Round.prototype.sumFinalScore = function() {
   for(var i = 0; i < 12; i++) {
     this.finalScore += this.scores[i];
@@ -70,55 +74,7 @@ Round.prototype.sumFinalScore = function() {
 
 
 
-// Function to take the User's answers from the input fields and store them in the Round constructor function's answers array
-Round.prototype.getAnswers = function() {
-  for(var i = 0; i < 12; i++) {
-    this.answers.push($('#answer-' + (i+1)).val());
-    this.answersObject[i] = $('#answer-' + (i+1)).val();
-  }
-  console.log(this.answers);
-  console.log(this.answersObject);
-};
 
-
-// Function to take the User's answers and:
-//    1)  Score blank answers as 0
-//    2)  Score answers that don't start with the proper letter as 0
-Round.prototype.autoRejectAnswers = function() {
-  $.ajax({
-    dataType: "json",
-    url: "auto_reject",
-    data: {answers: this.answersObject, id: window.location.pathname.replace("/rounds/", "")},
-    success: function(success) {
-      console.log(success);
-      for (var j = 0; j < 12; j++) {
-        round.scores[j] = success["scores"][j];
-      }
-      round.usersJudgeAnswers();
-      round.updateRejectedStyles();
-      round.finishScoring();
-      // rejectBadAnswers();
-    }
-  });
-};
-
-Round.prototype.usersJudgeAnswers = function() {
-
-  for(var i = 1; i < 13; i++) {
-    var button = $("<button>").text("Reject");
-    button.addClass("reject-button");
-    button.attr("id", "reject-" + i);
-
-    var id = "#slot-" + i;
-    button.appendTo(id);
-    
-    $(button).on("click", function() {
-      $(this).toggleClass("rejected-button");
-      $(this).siblings().toggleClass("rejected-input");
-      // updateScore();
-    });
-  }
-};
 
 
 // Add appropriate CSS styles to auto-rejected buttons and inputs before the User voting round

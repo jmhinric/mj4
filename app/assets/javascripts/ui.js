@@ -12,7 +12,10 @@ $(document).ready(function(){
   function render() {
     var n = 0;
 
+    // When the game initializes
     if (round.letter === "") {
+
+      // List out all the categories and add input tags
       $.each(round.categoryList, function(index, category) {
         $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
         $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
@@ -20,17 +23,19 @@ $(document).ready(function(){
         n++;
       });
 
+      // Timer is disabled until the letter is selected
       timer.attr("disabled", true);
 
+      // 
       $("#die_button").on("click", function() {
         setLetter();
-        // $("#die_button").attr("disabled", true);
       });
+
     } else {
       $("#die_button").attr("disabled", true);
     };
 
-    //timer
+    // timer
     if (round.timerStarted === false) {
       
       console.log("first");
@@ -41,9 +46,10 @@ $(document).ready(function(){
         // round.startTimer();
       });
     } else {
-      console.log("else")
+      console.log("else");
     }
 
+    // When the timer has run out:
     if (round.timeLeft === 0) {
       timeUp();
     }
@@ -94,11 +100,59 @@ $(document).ready(function(){
     clearInterval(intervalId);
     $("header").text("Time's Up!!!");
     $(".playcard").attr("disabled", "disabled");
-    round.getAnswers();
-    round.autoRejectAnswers();
+    getAnswers();
+    autoRejectAnswers();
   }
 
-  
+  // Take the player's answers from the input fields and store them in the round's answers
+  function getAnswers() {
+    for(var i = 0; i < 12; i++) {
+      round.submitAnswer(i, $('#answer-' + i).val());
+    }
+  }
+
+  // Take the player's answers and:
+  //    1)  Score blank answers as 0
+  //    2)  Score answers that don't start with the round's letter as 0
+  function autoRejectAnswers() {
+    $.ajax({
+      dataType: "json",
+      url: "auto_reject",
+      data: {answers: round.answers, id: window.location.pathname.replace("/rounds/", "")},
+      success: function(success) {
+        for (var j = 0; j < 12; j++) {
+          round.scores[j] = success["scores"][j];
+        }
+        usersJudgeAnswers();
+          
+      }
+        // round.updateRejectedStyles();
+        // round.finishScoring();
+        // rejectBadAnswers();
+      // }
+    });
+  };
+
+
+  // Add reject buttons
+  function usersJudgeAnswers() {
+
+    for(var i = 1; i < 13; i++) {
+      var button = $("<button>").text("Reject");
+      button.addClass("reject-button");
+      button.attr("id", "reject-" + i);
+
+      var id = "#slot-" + i;
+      button.appendTo(id);
+      
+      $(button).on("click", function() {
+        $(this).toggleClass("rejected-button");
+        $(this).siblings().toggleClass("rejected-input");
+        // updateScore();
+      });
+    }
+  };
+
 
 
 // Use some logic and code from this function for the Ruby Round class auto_reject method
