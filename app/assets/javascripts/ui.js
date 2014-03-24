@@ -14,7 +14,7 @@ $(document).ready(function(){
     
     console.log("Player is: " + round.player);
     // When the game initializes
-    if (round.letter === "" && round.player === 0) {
+    if (round.letter === "") {
       renderPlaycard();
       
       // Timer is disabled until the letter is selected
@@ -27,15 +27,12 @@ $(document).ready(function(){
 
       // First player has done the timer, second player needs to play
       //Reset DOM & playcard for Player 1
-    } else if (round.player === 1) {
+    } else {
       timer.text("Start Timer!");
       round.timeLeft = 6;
       round.timerStarted = false;
       renderPlaycard();
-    } else {
-      //Show both users' filled out playcards
     }
-
     // Letter has been selected but timer hasn't started
     if (round.timerStarted === false) {
       
@@ -45,6 +42,10 @@ $(document).ready(function(){
         // round.startTimer();
       });
     }
+  }
+
+  function renderJudging() {
+    console.log("Player is: " + round.player);
 
     // The timer has run out but scoring hasn't completed
     // if (round.timeLeft === 0 && !round.finishedScoring) {
@@ -134,7 +135,8 @@ $(document).ready(function(){
     } else if (round.timeLeft === 0) {
         timer.text(":0" + round.timeLeft);
         timeUp();
-        render();
+        // renderJudging();
+        console.log("Successful gameplay");
     } else if(round.timeLeft < 10) {
       timer.text(":0" + round.timeLeft);
     } else {
