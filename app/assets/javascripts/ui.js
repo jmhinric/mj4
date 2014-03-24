@@ -2,6 +2,7 @@ $(document).ready(function(){
   var round;
   getCategory();
 
+
   var intervalId;
   // var time = 6;
   // var score = 12;
@@ -10,38 +11,27 @@ $(document).ready(function(){
   
 
   function render() {
-    var n = 0;
+    
 
     // When the game initializes
     if (round.letter === "") {
-
-      // List out all the categories and add inputs
-      $.each(round.categoryList, function(index, category) {
-        
-        // Create and append HTML label
-        $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
-        
-        // Create input fields with event listeners
-        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>");
-        input.on("keyup", function(e) {
-          round.submitAnswer(e.target.id.replace("answer-", ""), input.val());
-        });
-
-        input.appendTo("#slot-"+n);
-        $("<br>").appendTo(".playcards");
-        n++;
-      });
-
+      renderPlaycard();
+      
       // Timer is disabled until the letter is selected
       timer.attr("disabled", true);
 
-      // 
+      // Event listener for getting the round letter
       $("#die_button").on("click", function() {
+        // $("#die_button").attr("disabled", true);
         setLetter();
       });
 
+      // First player has done the timer, second player needs to play
     } else {
-      $("#die_button").attr("disabled", true);
+      round.timeLeft = 6;
+      round.timerStarted = false;
+      renderPlaycard();
+      render();
     }
 
     // Letter has been selected but timer hasn't started
@@ -54,8 +44,6 @@ $(document).ready(function(){
         intervalId = setInterval(countDown, 1000);
         // round.startTimer();
       });
-    } else {
-      console.log("else");
     }
 
     // The timer has run out but scoring hasn't completed
@@ -94,6 +82,28 @@ $(document).ready(function(){
     });
   }
 
+  function renderPlaycard() {
+    // List out all the categories and add inputs
+    var n = 0;
+    $.each(round.categoryList, function(index, category) {
+      
+      // Create and append HTML label
+      $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
+      
+      // Create input fields with event listeners
+      var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>");
+      
+      // Event listener to record answers as they're typed
+      input.on("keyup", function(e) {
+        round.submitAnswer(e.target.id.replace("answer-", ""), input.val());
+      });
+
+      input.appendTo("#slot-"+n);
+      $("<br>").appendTo(".playcards");
+      n++;
+    });
+  }
+
   // Ajax to get the round's letter
   function setLetter() {
     $.ajax({
@@ -116,6 +126,8 @@ $(document).ready(function(){
     
     if (round.timeLeft === 0) {
       timer.text(":0" + round.timeLeft);
+      
+      if (round.player === 0) { round.player = 1; }
       render();
     } else if(round.timeLeft < 10) {
       timer.text(":0" + round.timeLeft);

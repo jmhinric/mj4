@@ -7,7 +7,7 @@ class Round < ActiveRecord::Base
     @scores = []
     alphabet = ("a".."z").to_a
     unused_letters = ["q", "u", "v", "x", "y", "z"]
-    letter_set = alphabet - unused_letters
+    @letter_set = alphabet - unused_letters
     @number = 1
     @letter
   end

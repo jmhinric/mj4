@@ -18,7 +18,6 @@ class RoundsController < ApplicationController
 
   def get_letter
     letter = @round.letter
-    # binding.pry
     render json: {letter: letter}
   end
 

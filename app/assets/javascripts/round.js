@@ -12,6 +12,8 @@ function Round(categoryList){
   this.scoresObject = {};
   this.finalScore = 0;
   this.timerStarted = false;
+  this.player = 0;
+
   // this.finishedScoring = false;
 }
 
