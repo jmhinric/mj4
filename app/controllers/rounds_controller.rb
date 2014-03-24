@@ -9,7 +9,6 @@ class RoundsController < ApplicationController
 
   def create
     @round = Round.create
-    @round.after_initialize
     redirect_to round_path(@round)
   end
 
