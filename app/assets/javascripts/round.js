@@ -13,6 +13,7 @@ function Round(categoryList){
   this.finalScore = 0;
   this.timerStarted = false;
   this.player = 0;
+  this.numberOfPlayers = 2;
 
   // this.finishedScoring = false;
 }
