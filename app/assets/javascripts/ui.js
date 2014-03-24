@@ -137,14 +137,21 @@ $(document).ready(function(){
   // Add reject buttons
   function usersJudgeAnswers() {
 
-    for(var i = 1; i < 13; i++) {
+    for(var i = 0; i < 12; i++) {
+      // Create buttons, add class and id
       var button = $("<button>").text("Reject");
       button.addClass("reject-button");
       button.attr("id", "reject-" + i);
-
       var id = "#slot-" + i;
       button.appendTo(id);
-      
+
+      // Add CSS for rejected answers
+      if(round.scores[i] === 0) {
+        $(button).toggleClass("rejected-button");
+        $(button).siblings().toggleClass("rejected-input");
+      }
+
+      // Event listener for player rejecting an answer
       $(button).on("click", function() {
         $(this).toggleClass("rejected-button");
         $(this).siblings().toggleClass("rejected-input");
@@ -152,6 +159,18 @@ $(document).ready(function(){
       });
     }
   };
+
+  // Add appropriate CSS styles to auto-rejected buttons and inputs before the User voting round
+  function updateRejectedStyles() {
+    for (var j = 0; j < 12; j++) {
+      // var buttonId = "#reject-" + (j+1);
+      // if(round.scores[j] === 0) {
+      //   $(buttonId).toggleClass("rejected-button");
+      //   $(buttonId).siblings().toggleClass("rejected-input");
+      // }
+    }
+  };
+
 
 
 

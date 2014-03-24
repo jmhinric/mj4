@@ -77,16 +77,6 @@ Round.prototype.sumFinalScore = function() {
 
 
 
-// Add appropriate CSS styles to auto-rejected buttons and inputs before the User voting round
-Round.prototype.updateRejectedStyles = function() {
-  for (var j = 0; j < 12; j++) {
-    var buttonId = "#reject-" + (j+1);
-    if(this.scores[j] === 0) {
-      $(buttonId).toggleClass("rejected-button");
-      $(buttonId).siblings().toggleClass("rejected-input");
-    }
-  }
-};
 
 
 Round.prototype.finishScoring = function() {
