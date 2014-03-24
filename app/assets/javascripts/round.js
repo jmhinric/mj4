@@ -1,7 +1,8 @@
 function Round(categoryList){
-  // if (category === undefined) {
-  //   throw "No category error.";
-  // }
+  if (categoryList === undefined ||
+      categoryList === []) {
+    throw "No category error.";
+  }
   this.letter = "";
   this.categoryList = categoryList;
   this.timeLeft = 6;
@@ -11,6 +12,7 @@ function Round(categoryList){
   this.scoresObject = {};
   this.finalScore = 0;
   this.timerStarted = false;
+  // this.finishedScoring = false;
 }
 
 
@@ -44,7 +46,9 @@ Round.prototype.startTimer = function(){
 };
 
 Round.prototype.submitAnswer = function(answerNumber, answerText) {
-  this.answers[answerNumber] = answerText;
+  if (this.timeLeft > 0) {
+    this.answers[answerNumber] = answerText;
+  }
 };
 
 Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
@@ -59,7 +63,7 @@ Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
 
 // Player scores an answer as 0 or 1
 Round.prototype.scoreAnswer = function(answerNumber, score) {
-  if (score === 0 || score === 1) {
+   if (score === 0 || score === 1) {
     this.scores[answerNumber] = score;
   }
 };

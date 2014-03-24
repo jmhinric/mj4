@@ -17,7 +17,7 @@ describe("Round", function(){
       
       expect(round.categoryList).toBe(roundCategoryList);
     });
-    xit("throws an error when there is no category", function(){
+    it("throws an error when there is no category", function(){
       expect(function(){round = new Round();}).toThrow("No category error.");
     });
   
@@ -70,25 +70,34 @@ describe("Round", function(){
 
   });
 
+  describe("#submitAnswer", function() {
+    
+    it("takes answers for category questions", function() {
+      round.submitAnswer(0, "anchor");
+      expect(round.answers[0]).toBe("anchor");
+    });
+
+    it("doesn't take answers if the time is up", function() {
+      round.timeLeft = 0;
+      round.submitAnswer(5, "bell");
+      expect(round.answers[5]).toBe(undefined);
+    });
+
+  });
+
   describe("Scoring answers", function() {
     beforeEach(function(){
-      round.timeLeft = 60;
-      jasmine.clock().install();
+      // round.timeLeft = 60;
+      // jasmine.clock().install();
       round.setRoundLetter("a");
-      round.startTimer();
-      jasmine.clock().tick(60000);
+      // round.startTimer();
+      // jasmine.clock().tick(60000);
     });
 
-    afterEach(function(){
-      jasmine.clock().uninstall();
-    });
+    // afterEach(function(){
+      // jasmine.clock().uninstall();
+    // });
 
-    describe("#submitAnswer", function() {
-      it("takes answers for category questions", function() {
-        round.submitAnswer(0, "anchor");
-        expect(round.answers[0]).toBe("anchor");
-      });
-    });
 
     describe("#autoRejectAnswer", function() {
       it("scores an answer as 0 if it is blank", function() {

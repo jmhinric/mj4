@@ -6,7 +6,7 @@ $(document).ready(function(){
   // var time = 6;
   // var score = 12;
   // var answerPoints = [];
-  timer = $(".timer button"); 
+  timer = $(".timer button");
   
 
   function render() {
@@ -17,8 +17,17 @@ $(document).ready(function(){
 
       // List out all the categories and add inputs
       $.each(round.categoryList, function(index, category) {
+        
+        // Create and append HTML label
         $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
-        $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>").appendTo("#slot-"+n);
+        
+        // Create input fields with event listeners
+        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>");
+        input.on("keyup", function(e) {
+          round.submitAnswer(e.target.id.replace("answer-", ""), input.val());
+        });
+
+        input.appendTo("#slot-"+n);
         $("<br>").appendTo(".playcards");
         n++;
       });
@@ -49,22 +58,27 @@ $(document).ready(function(){
       console.log("else");
     }
 
-    // The timer has run out
-    if (round.timeLeft === 0) {
+    // The timer has run out but scoring hasn't completed
+    // if (round.timeLeft === 0 && !round.finishedScoring) {
+    if (round.timeLeft === 0) {  
       timer.attr("disabled", true);
       
       // Stop the timer, show a message, disable inputs
       timeUp();
       
       // Store inputs in the round's answers
-      getAnswers();
+      // UPDATE! - WE NOW RECORD ANSWERS ON EACH KEYSTROKE AND ONLY WHILE THERE IS TIME REMAINING ON THE CLOCK
+      // getAnswers();
 
       // Ajax to auto-score blank answers or ones not starting with the round letter
       autoRejectAnswers();
 
       // Button for player to submit their answer rejections
       finishScoringButton();
-    }
+    } 
+    // else {
+    //   submitFinalScores();
+    // }
   }
   
   // Ajax to get the round's category
@@ -140,7 +154,6 @@ $(document).ready(function(){
     });
   }
 
-
   // Add reject buttons
   function addRejectButtons() {
 
@@ -156,6 +169,7 @@ $(document).ready(function(){
       // Add CSS for rejected answers
       if(round.scores[i] === 0) {
         $(button).toggleClass("rejected-button");
+        $(button).attr("disabled", "disabled");
         $(button).siblings().toggleClass("rejected-input");
       }
 
@@ -173,6 +187,10 @@ $(document).ready(function(){
     finishButton.addClass("finish-button");
     finishButton.text("Finished Scoring");
     finishButton.one("click", submitFinalScores);
+    // finishButton.one("click", function() {
+    //   round.finishedScoring = true;
+    //   render();
+    // });
     finishButton.appendTo(".score");
   }
 
