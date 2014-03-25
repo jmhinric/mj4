@@ -27,7 +27,6 @@ class Round < ActiveRecord::Base
   end
 
   def auto_reject(player, answers)
-    binding.pry
     (0..11).each do |index|
       # TODO Record each answer on Redis
       if answers[index].to_s == "" || answers[index].to_s.first.downcase != letter

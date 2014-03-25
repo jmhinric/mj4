@@ -131,6 +131,8 @@ $(document).ready(function(){
     
     if (round.timeLeft === 0 && round.player < (round.numberOfPlayers - 1)) {
       
+      timer.text(":0" + round.timeLeft);
+      timeUp();
       autoRejectAnswers();
       // timer.text(":0" + round.timeLeft);
       // round.player++;
@@ -177,18 +179,16 @@ $(document).ready(function(){
           round.scores[j] = success["scores"][j];
         }
           if (round.player < (round.numberOfPlayers - 1)) {
-            timer.text(":0" + round.timeLeft);
-            round.player++;
+            
             console.log("in the success function – player is: " + round.player);
-            timeUp();
+            round.player++;
             $(".playcards").empty();
             render();
           }
 
           else {
-            timer.text(":0" + round.timeLeft);
+            
             console.log("in the success function – player is: " + round.player);
-            timeUp();
         // Note:  need to add this somewhere else
         // addRejectButtons();
             
