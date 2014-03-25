@@ -34,9 +34,9 @@ class Round < ActiveRecord::Base
       else
         self.set_score(index, 1)
       end
-
-      $redis.HSET(self.id, "player#{player}::#{self.id}::answer#{index}", answers[index])
-      $redis.HSET(self.id, "player#{player}::#{self.id}::score#{index}", scores[index])
+      # binding.pry
+      $redis.HSET(self.id, "player#{player}::answer#{index}", answers[index])
+      $redis.HSET(self.id, "player#{player}::score#{index}", scores[index])
     end
     self.scores
   end
