@@ -175,7 +175,7 @@ $(document).ready(function(){
           // Update the JS model scores
           round.scores[j] = success["scores"][j];
         }
-          if (round.player < round.numberOfPlayers) {
+          if (round.player < (round.numberOfPlayers - 1)) {
             timer.text(":0" + round.timeLeft);
             round.player++;
             console.log("in the success function – player is: " + round.player);
@@ -185,6 +185,9 @@ $(document).ready(function(){
           }
 
           else {
+            timer.text(":0" + round.timeLeft);
+            console.log("in the success function – player is: " + round.player);
+            timeUp();
         // Note:  need to add this somewhere else
         // addRejectButtons();
             
