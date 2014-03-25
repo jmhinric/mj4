@@ -45,21 +45,24 @@ $(document).ready(function(){
   }
 
   function renderJudging() {
-    for(var p = 0; p < round.numberOfPlayers; p++){
+    for(var playerCounter = 0; playerCounter < round.numberOfPlayers; playerCounter ++){
       var n = 0;
       $.each(round.categoryList, function(index, category) {
 
         // Create and append HTML label
-        if (p === 0 ) {
-          $("<label class='answer-label' id='slot-"+n+"'>"+category+"</label>").appendTo(".playcards");
+        if (playerCounter === 0 ) {
+          $("<label class='answer-label' id='slot-"+playerCounter+"-"+n+"'>"+category+"</label>").appendTo(".playcards");
+        } else {
+          $("<label class='answer-label' id='slot-"+playerCounter+"-"+n+"'></label>").appendTo(".playcards");
         }
         
         // Create input fields with event listeners
-        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+n+"'>");
-        input.val(round.answers[p][n]);
+        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+playerCounter+"-"+n+"'>");
+        input.val(round.answers[playerCounter][n]);
 
-        input.appendTo("#slot-"+n);
+        input.appendTo("#slot-"+playerCounter+"-"+n);
         $("<br>").appendTo(".playcards");
+        addRejectButtons(playerCounter, n);
         n++;
       });
     //end for loop \/  
@@ -206,31 +209,31 @@ $(document).ready(function(){
   }
 
   // Add reject buttons
-  // function addRejectButtons() {
+  function addRejectButtons(playerCounter, n) {
 
-  //   for(var i = 0; i < 12; i++) {
+      // for(var i = 0; i < 12; i++) {
 
-  //     // Create buttons, add class and id
-  //     var button = $("<button>").text("Reject");
-  //     button.addClass("reject-button");
-  //     button.attr("id", "reject-" + i);
-  //     var id = "#slot-" + i;
-  //     button.appendTo(id);
+        // Create buttons, add class and id
+        var button = $("<button>").text("Reject");
+        button.addClass("reject-button");
+        button.attr("id", "reject-" + n);
+        var id = "#slot-"+playerCounter+"-"+n;
+        button.appendTo(id);
 
-  //     // Add CSS for rejected answers
-  //     if(round.scores[i] === 0) {
-  //       $(button).toggleClass("rejected-button");
-  //       $(button).attr("disabled", "disabled");
-  //       $(button).siblings().toggleClass("rejected-input");
-  //     }
+        // Add CSS for rejected answers
+        if(round.scores[playerCounter][n] === 0) {
+          $(button).toggleClass("rejected-button");
+          $(button).attr("disabled", "disabled");
+          $(button).siblings().toggleClass("rejected-input");
+        }
 
-  //     // Add event listener for player rejecting an answer
-  //     $(button).on("click", function() {
-  //       $(this).toggleClass("rejected-button");
-  //       $(this).siblings().toggleClass("rejected-input");
-  //     });
-  //   }
-  // }
+        // Add event listener for player rejecting an answer
+        $(button).on("click", function() {
+          $(this).toggleClass("rejected-button");
+          $(this).siblings().toggleClass("rejected-input");
+        });
+      // }
+  }
 
   // Button for player to submit their rejected answers
   function finishScoringButton() {
