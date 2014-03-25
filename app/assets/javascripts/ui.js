@@ -8,6 +8,7 @@ $(document).ready(function(){
   // var score = 12;
   // var answerPoints = [];
   timer = $(".timer button");
+  header = $("header");
   
 
   function render() {
@@ -155,7 +156,7 @@ $(document).ready(function(){
   // Stop the timer, display a message, disable the inputs
   function timeUp() {
     clearInterval(intervalId);
-    $("header").text("Time's Up!!!");
+    $(header).after("<h2>Time's Up!!</h2>")
     $(".playcard").attr("disabled", "disabled");
   }
 
