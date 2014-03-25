@@ -73,14 +73,14 @@ describe("Round", function(){
   describe("#submitAnswer", function() {
     
     it("takes answers for category questions", function() {
-      round.submitAnswer(0, "anchor");
-      expect(round.answers[0]).toBe("anchor");
+      round.submitAnswer(0, 0, "anchor");
+      expect(round.answers[0][0]).toBe("anchor");
     });
 
     it("doesn't take answers if the time is up", function() {
       round.timeLeft = 0;
-      round.submitAnswer(5, "bell");
-      expect(round.answers[5]).toBe(undefined);
+      round.submitAnswer(1, 5, "bell");
+      expect(round.answers[1][5]).toBe(undefined);
     });
 
   });
@@ -101,41 +101,41 @@ describe("Round", function(){
 
     describe("#autoRejectAnswer", function() {
       it("scores an answer as 0 if it is blank", function() {
-        round.submitAnswer(0, "");
-        round.autoRejectAnswer(0, round.answers[0]);
-        expect(round.scores[0]).toBe(0);
+        round.submitAnswer(0, 0, "");
+        round.autoRejectAnswer(0, 0, round.answers[0][0]);
+        expect(round.scores[0][0]).toBe(0);
       });
 
       it("scores an answer as 0 if the first letter of the word is not the round's letter", function() {
-        round.submitAnswer(0, "maserati");
-        round.autoRejectAnswer(0, round.answers[0]);
-        expect(round.scores[0]).toBe(0);
+        round.submitAnswer(0, 0, "maserati");
+        round.autoRejectAnswer(0, 0, round.answers[0][0]);
+        expect(round.scores[0][0]).toBe(0);
       });
 
       it("scores an answer as 1 if it begins with the round's letter", function() {
-        round.submitAnswer(0, "abacus");
-        round.autoRejectAnswer(0, round.answers[0]);
-        expect(round.scores[0]).toBe(1);
+        round.submitAnswer(1, 0, "abacus");
+        round.autoRejectAnswer(1, 0, round.answers[1][0]);
+        expect(round.scores[1][0]).toBe(1);
       });
 
       it("doesn't let capitalization affect scoring", function() {
-        round.submitAnswer(0, "Abacus");
-        round.autoRejectAnswer(0, round.answers[0]);
-        expect(round.scores[0]).toBe(1);
+        round.submitAnswer(1, 0, "Abacus");
+        round.autoRejectAnswer(1, 0, round.answers[1][0]);
+        expect(round.scores[1][0]).toBe(1);
       });
     });
 
     describe("#scoreAnswer", function() {
       it("scores an answer as 0 or 1", function() {
-        round.scores[0] = 1;
-        round.scoreAnswer(0,0);
-        expect(round.scores[0]).toBe(0);
+        round.scores[1][0] = 1;
+        round.scoreAnswer(1, 0, 0);
+        expect(round.scores[1][0]).toBe(0);
       });
 
       it("doesn't score the answer if the score given is not 0 or 1", function() {
-        round.scores[0] = 1;
-        round.scoreAnswer(0,2);
-        expect(round.scores[0]).toBe(1);
+        round.scores[1][0] = 1;
+        round.scoreAnswer(1,0,2);
+        expect(round.scores[1][0]).toBe(1);
       });
     });
 

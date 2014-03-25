@@ -4,12 +4,14 @@ class Round < ActiveRecord::Base
   attr_accessor :letter_set
 
   after_initialize do |user|
-    @scores = []
     alphabet = ("a".."z").to_a
     unused_letters = ["q", "u", "v", "x", "y", "z"]
     @letter_set = alphabet - unused_letters
     @number = 1
     @letter
+    @number_of_players = 2
+    @answers = [ [], [] ]
+    @scores = [ [], [] ]
   end
 
   def letter
@@ -30,15 +32,43 @@ class Round < ActiveRecord::Base
     (0..11).each do |index|
       # TODO Record each answer on Redis
       if answers[index].to_s == "" || answers[index].to_s.first.downcase != letter
-        self.set_score(index, 0)
+        # self.set_score(index, 0)
+        $redis.HSET(self.id, "player#{player}::score#{index}", 0)
       else
-        self.set_score(index, 1)
+        # self.set_score(index, 1)
+        $redis.HSET(self.id, "player#{player}::score#{index}", 1)
       end
-      # binding.pry
+
       $redis.HSET(self.id, "player#{player}::answer#{index}", answers[index])
-      $redis.HSET(self.id, "player#{player}::score#{index}", scores[index])
     end
-    self.scores
+
+  end
+
+  def number_of_players
+    return @number_of_players
+  end
+
+  def all_player_answers
+
+    (0...self.number_of_players).each do |player_number|
+      (0..11).each do |answer_number|
+        @answers[player_number][answer_number] = ($redis.hget(self.id, "player#{player_number}::answer#{answer_number}"))
+      end
+    end
+
+    return @answers
+
+  end
+
+  def all_player_scores
+
+    (0...self.number_of_players).each do |player_number|
+      (0..11).each do |score_number|
+        @scores[player_number][score_number] = ($redis.hget(self.id, "player#{player_number}::score#{score_number}"))
+      end
+    end
+
+    return @scores
   end
 
   def finalize_answers(scores)
@@ -49,10 +79,10 @@ class Round < ActiveRecord::Base
     self.scores
   end
 
-  def set_score(index, score)
+  # def set_score(index, score)
     # TODO Record each answer's current score on Redis
-    self.scores[index] = score
-  end
+    # self.scores[index] = score
+  # end
 
   def scores
     @scores

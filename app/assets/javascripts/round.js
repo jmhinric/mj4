@@ -5,15 +5,16 @@ function Round(categoryList){
   }
   this.letter = "";
   this.categoryList = categoryList;
-  this.timeLeft = 60;
-  this.answers = [];
+  this.timeLeft = 10;
+  this.answers = [[], []];
   // this.answersObject = {};
-  this.scores = [];
+  this.scores = [[], []];
   // this.scoresObject = {};
   this.finalScore = 0;
   this.timerStarted = false;
   this.player = 0;
   this.numberOfPlayers = 2;
+  this.allAnswersEntered = false;
 
   // this.finishedScoring = false;
 }
@@ -48,26 +49,26 @@ Round.prototype.startTimer = function(){
   }
 };
 
-Round.prototype.submitAnswer = function(answerNumber, answerText) {
+Round.prototype.submitAnswer = function(player, answerNumber, answerText) {
   if (this.timeLeft > 0) {
-    this.answers[answerNumber] = answerText;
+    this.answers[player][answerNumber] = answerText;
   }
 };
 
-Round.prototype.autoRejectAnswer = function(answerNumber, answerText) {
+Round.prototype.autoRejectAnswer = function(player, answerNumber, answerText) {
   if (answerText === "" || answerText === undefined) {
-    this.scores[answerNumber] = 0;
+    this.scores[player][answerNumber] = 0;
   } else if (answerText[0].toLowerCase() !== this.letter) {
-    this.scores[answerNumber] = 0;
+    this.scores[player][answerNumber] = 0;
   } else {
-    this.scores[answerNumber] = 1;
+    this.scores[player][answerNumber] = 1;
   }
 };
 
 // Player scores an answer as 0 or 1
-Round.prototype.scoreAnswer = function(answerNumber, score) {
+Round.prototype.scoreAnswer = function(player, answerNumber, score) {
    if (score === 0 || score === 1) {
-    this.scores[answerNumber] = score;
+    this.scores[player][answerNumber] = score;
   }
 };
 
