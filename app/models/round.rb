@@ -19,7 +19,7 @@ class Round < ActiveRecord::Base
   def letter=(letter)
     $redis.hset(self.id, "letter", letter)
     @letter = letter
-    binding.pry
+    # binding.pry
   end
   
   def random_letter_die
@@ -34,6 +34,9 @@ class Round < ActiveRecord::Base
       else
         self.set_score(index, 1)
       end
+
+      $redis.HSET(self.id, "player#{player}::#{self.id}::answer#{index}", answers[index])
+      $redis.HSET(self.id, "player#{player}::#{self.id}::score#{index}", scores[index])
     end
     self.scores
   end
@@ -57,7 +60,7 @@ class Round < ActiveRecord::Base
 
   def pick_category
     @pick_category = $redis.smembers("all_categories").sample
-    
+    $redis.HSET(self.id, "category", @pick_category)
     return $redis.smembers(@pick_category)
   end
 
