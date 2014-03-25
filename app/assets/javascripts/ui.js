@@ -31,7 +31,7 @@ $(document).ready(function(){
       //Reset DOM & playcard for Player 1
     } else {
       timer.text("Start Timer!");
-      round.timeLeft = 6;
+      round.timeLeft = 60;
       round.timerStarted = false;
       timerListener();
       renderPlaycard();
