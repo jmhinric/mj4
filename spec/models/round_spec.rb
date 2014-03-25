@@ -15,25 +15,25 @@ describe "#auto_reject" do
 
   it "scores an answer as 0 if it is blank" do
     round.letter = "a"
-    round.auto_reject([""]);
+    round.auto_reject(0, [""]);
     expect(round.scores[0]).to eq(0);
   end
 
   it "scores an answer as 0 if the first letter of the word is not the round's letter" do
     round.letter = "a"
-    round.auto_reject(["maserati"]);
+    round.auto_reject(0, ["maserati"]);
     expect(round.scores[0]).to eq(0);
   end
 
   it "scores an answer as 1 if it begins with the round's letter" do
     round.letter = "a"
-    round.auto_reject(["abacus"]);
+    round.auto_reject(0, ["abacus"]);
     expect(round.scores[0]).to eq(1);
   end
 
   it "doesn't let capitalization affect scoring" do
     round.letter = "a"
-    round.auto_reject(["Abacus"]);
+    round.auto_reject(0, ["Abacus"]);
     expect(round.scores[0]).to eq(1);
   end
 end
