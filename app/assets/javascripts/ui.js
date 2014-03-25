@@ -25,23 +25,18 @@ $(document).ready(function(){
         setLetter();
       });
 
+      timerListener();
+
       // First player has done the timer, second player needs to play
       //Reset DOM & playcard for Player 1
     } else {
       timer.text("Start Timer!");
       round.timeLeft = 6;
       round.timerStarted = false;
+      timerListener();
       renderPlaycard();
     }
-    // Letter has been selected but timer hasn't started
-    if (round.timerStarted === false) {
-      
-      timer.one("click", function() {
-        $(".playcard").attr('disabled', false);
-        intervalId = setInterval(countDown, 1000);
-        // round.startTimer();
-      });
-    }
+
   }
 
   function renderJudging() {
@@ -60,7 +55,7 @@ $(document).ready(function(){
       // getAnswers();
 
       // Ajax to auto-score blank answers or ones not starting with the round letter
-      autoRejectAnswers();
+      // autoRejectAnswers();
 
       // Button for player to submit their answer rejections
       finishScoringButton();
@@ -121,20 +116,31 @@ $(document).ready(function(){
     });
   }
 
+  function timerListener() {  
+    timer.one("click", function() {
+      $(".playcard").attr('disabled', false);
+      intervalId = setInterval(countDown, 1000);
+      // round.startTimer();
+    });
+  }
+
   // Decrement the timer and display the time
   function countDown() {
     round.timeLeft -= 1;
     console.log(round.timeLeft);
     
     if (round.timeLeft === 0 && round.player < (round.numberOfPlayers - 1)) {
-      timer.text(":0" + round.timeLeft);
-      round.player++;
-      timeUp();
-      $(".playcards").empty();
-      render();
+      
+      autoRejectAnswers();
+      // timer.text(":0" + round.timeLeft);
+      // round.player++;
+      // timeUp();
+      // $(".playcards").empty();
+      // render();
     } else if (round.timeLeft === 0) {
         timer.text(":0" + round.timeLeft);
         timeUp();
+        autoRejectAnswers();
         // renderJudging();
         console.log("Successful gameplay");
     } else if(round.timeLeft < 10) {
@@ -169,7 +175,20 @@ $(document).ready(function(){
           // Update the JS model scores
           round.scores[j] = success["scores"][j];
         }
-        addRejectButtons();
+          if (round.player < round.numberOfPlayers) {
+            timer.text(":0" + round.timeLeft);
+            round.player++;
+            console.log("in the success function – player is: " + round.player);
+            timeUp();
+            $(".playcards").empty();
+            render();
+          }
+
+          else {
+        // Note:  need to add this somewhere else
+        // addRejectButtons();
+            
+          }
       }
     });
   }
