@@ -15,6 +15,9 @@
 
 body {
   text-align: center;
+  background-image: url(Scat-Pink_Slate.png);
+  background-repeat: repeat;
+  background-attachment: fixed;
   /*margin-left: auto;*/
 }
 
@@ -25,13 +28,19 @@ h1 {
   padding-top: 40px;
 }
 
+h2 {
+  font-family: 'Cinzel', serif;
+  color: yellow;
+  font-size: 36px;
+}
+
 header {
   font-family: 'Cinzel', serif;
   font-size: 48px;
   color: yellow;
   padding: 30px;
   width: 900px;
-  margin: 0 auto 100px auto;
+  margin: 0 auto 25px auto;
 }
 
 .logo {
@@ -40,32 +49,49 @@ header {
 
 .content-container {
   position: relative;
-  width: 900px;
+  width: 1000px;
   margin: 0 auto;
 }
 
-.page-wrapper {
-  background-image: url(Scat-Pink_Slate.png);
-  background-repeat: repeat;
+/*.page-wrapper {
+
   padding: 30px;
   border: 10px solid #000000;
   margin: 0 auto;
   width: 90%;
   min-height: 650px;
-}
+}*/
 
 .playcards {
   background: white;
   padding: 20px;
+  padding-top: 40px;
   text-align: left;
   float: left;
   position: relative;
   border: 5px solid #000000;
-
+  font-size: 24px;
+  color: #5a5a5a;
 }
 
 .game-controls {
   float: right;
+}
+
+#roll_result {
+  font-family: 'Cinzel', serif;
+  font-size: 48px;
+  color: blue;
+  text-align: center;
+  background: white;
+  margin: 10px;
+  width: 100px;
+  position: center;
+  border:hidden 5px #000000;
+  -moz-border-radius: 14px;
+  -webkit-border-radius: 14px;
+  border-radius: 14px;
+  margin-left: 35px;
 }
 
 input {
@@ -75,3 +101,22 @@ input {
 .clear {
   clear: both;
 }
+button, input[type="submit"]{
+  color: rgb(96, 96, 96);
+  font-size: 24px;
+  padding: 15px;
+  text-shadow: 0px -1px 0px rgba(30, 30, 30, 0.8);
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  background: rgb(239, 180, 43);
+  background: -moz-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
+  background: -webkit-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
+  background: -o-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
+  background: -ms-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
+  background: linear-gradient(0deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
+  -webkit-box-shadow: 0px 2px 1px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow:    0px 2px 1px rgba(50, 50, 50, 0.75);
+  box-shadow:         0px 2px 1px rgba(50, 50, 50, 0.75);
+}
+
