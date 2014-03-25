@@ -17,3 +17,6 @@
 
 # Ignore database.yml files
 /config/database.yml
+
+# Ignore dump.rdb file
+/dump.rdb
