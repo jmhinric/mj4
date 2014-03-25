@@ -25,7 +25,7 @@ class Round < ActiveRecord::Base
     letter = @letter_set.sample
   end
 
-  def auto_reject(answers)
+  def auto_reject(player, answers)
     # self.after_initialize
     (0..11).each do |index|
       # TODO Record each answer on Redis

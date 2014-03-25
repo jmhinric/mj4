@@ -23,7 +23,7 @@ class RoundsController < ApplicationController
 
   def auto_reject
     # binding.pry
-    @scores = @round.auto_reject(params["answers"])
+    @scores = @round.auto_reject(params["player"], params["answers"])
     render json: {scores: @scores}
   end
 

@@ -169,7 +169,7 @@ $(document).ready(function(){
     $.ajax({
       dataType: "json",
       url: "auto_reject",
-      data: {answers: round.answers, id: window.location.pathname.replace("/rounds/", "")},
+      data: {answers: round.answers, id: window.location.pathname.replace("/rounds/", ""), player: round.player},
       success: function(success) {
         for (var j = 0; j < 12; j++) {
           // Update the JS model scores
