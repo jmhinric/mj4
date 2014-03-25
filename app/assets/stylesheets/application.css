@@ -8,6 +8,70 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require normalize
  *= require_self
  *= require_tree .
  */
+
+body {
+  text-align: center;
+  /*margin-left: auto;*/
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  color: yellow;
+  font-size: 48px;
+  padding-top: 40px;
+}
+
+header {
+  font-family: 'Cinzel', serif;
+  font-size: 48px;
+  color: yellow;
+  padding: 30px;
+  width: 900px;
+  margin: 0 auto 100px auto;
+}
+
+.logo {
+  float: left;
+}
+
+.content-container {
+  position: relative;
+  width: 900px;
+  margin: 0 auto;
+}
+
+.page-wrapper {
+  background-image: url(Scat-Pink_Slate.png);
+  background-repeat: repeat;
+  padding: 30px;
+  border: 10px solid #000000;
+  margin: 0 auto;
+  width: 90%;
+  min-height: 650px;
+}
+
+.playcards {
+  background: white;
+  padding: 20px;
+  text-align: left;
+  float: left;
+  position: relative;
+  border: 5px solid #000000;
+
+}
+
+.game-controls {
+  float: right;
+}
+
+input {
+  margin: 5px;
+}
+
+.clear {
+  clear: both;
+}
