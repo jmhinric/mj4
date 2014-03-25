@@ -10,6 +10,8 @@ class Round < ActiveRecord::Base
     @letter_set = alphabet - unused_letters
     @number = 1
     @letter
+    @number_of_players = 2
+    @answers = [[], []]
   end
 
   def letter
@@ -39,6 +41,25 @@ class Round < ActiveRecord::Base
       $redis.HSET(self.id, "player#{player}::score#{index}", scores[index])
     end
     self.scores
+  end
+
+  def number_of_players
+    return @number_of_players
+  end
+
+  def all_player_answers
+
+    (0...self.number_of_players).each do |player_number|
+      (0..11).each do |answer_number|
+        @answers[player_number].push($redis.hget(self.id, "player#{player_number}::answer#{answer_number}"))
+      end
+    end
+
+    return @answers
+
+  end
+
+  def all_player_scores
   end
 
   def finalize_answers(scores)

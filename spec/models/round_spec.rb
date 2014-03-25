@@ -37,3 +37,18 @@ describe "#auto_reject" do
     expect(round.scores[0]).to eq(1);
   end
 end
+
+describe "#all_player_answers" do 
+  let(:round) { Round.create }
+  it "collects all player answers" do
+    round.pick_category
+    round.letter = "a"
+
+    answers_first = ["Apple", "abacus", "", "bear", "Monkey", "austin", "adam", "", "arithmetic", "atlanta", "allegory", "" ]
+    answers_second = ["", "algebra", "plum", "umbrella", "jacket", "aunt", "ant", "aussie", "", "top", "apple", "eskimo"]
+
+    round.auto_reject(0, answers_first)
+    round.auto_reject(1, answers_second)
+    expect(round.all_player_answers).to eq([answers_first, answers_second])
+  end
+end

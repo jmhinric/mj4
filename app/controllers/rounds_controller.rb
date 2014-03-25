@@ -23,8 +23,10 @@ class RoundsController < ApplicationController
 
   def auto_reject
     @round = Round.find(params[:id])
-    @scores = @round.auto_reject(params["player"], params["answers"])
-    render json: {scores: @scores}
+    @round.auto_reject(params["player"], params["answers"])
+    @answers = round.all_player_answers
+    @scores = round.all_player_scores
+    render json: {answers: @answers, scores: @scores}
   end
 
   def finalize_answers
