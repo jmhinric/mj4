@@ -17,6 +17,7 @@ $(document).ready(function(){
     if (round.allAnswersEntered) {
       $(".playcards").empty();
       renderJudging();
+      finishScoringButton();
     }
 
     // When the game initializes
@@ -37,6 +38,7 @@ $(document).ready(function(){
       //Reset DOM & playcard for Player 1
     } else {
       timer.text("Start Timer!");
+      $("#time-up-message").text("Player 2's Turn!");
       round.timeLeft = 10;
       round.timerStarted = false;
       timerListener();
@@ -66,9 +68,7 @@ $(document).ready(function(){
         addRejectButtons(playerCounter, n);
         n++;
       });
-    //end for loop \/  
     }
-    // finishScoringButton();
   }
   
   // Ajax to get the round's category
@@ -140,16 +140,10 @@ $(document).ready(function(){
       timer.text(":0" + round.timeLeft);
       timeUp();
       autoRejectAnswers();
-      // timer.text(":0" + round.timeLeft);
-      // round.player++;
-      // timeUp();
-      // $(".playcards").empty();
-      // render();
     } else if (round.timeLeft === 0) {
         timer.text(":0" + round.timeLeft);
         timeUp();
         autoRejectAnswers();
-        // renderJudging();
         console.log("Successful gameplay");
     } else if(round.timeLeft < 10) {
       timer.text(":0" + round.timeLeft);
@@ -161,7 +155,7 @@ $(document).ready(function(){
   // Stop the timer, display a message, disable the inputs
   function timeUp() {
     clearInterval(intervalId);
-    $(header).after("<h2>Time's Up!!</h2>")
+    $(header).after("<h2 id='time-up-message'>Time's Up!!</h2>");
     $(".playcard").attr("disabled", "disabled");
   }
 
@@ -187,24 +181,18 @@ $(document).ready(function(){
             round.answers[z][j] = success["answers"][z][j];
           }
         }
-
-          if (round.player < (round.numberOfPlayers - 1)) {
-            
-            console.log("in the success function – player is: " + round.player);
-            round.player++;
-            $(".playcards").empty();
-            render();
-          }
-
-          else {
-            
-            console.log("in the success function – player is: " + round.player);
-            round.allAnswersEntered = true;
-            render();
-        // Note:  need to add this somewhere else
-        // addRejectButtons();
-            
-          }
+        if (round.player < (round.numberOfPlayers - 1)) { 
+          console.log("in the success function – player is: " + round.player);
+          round.player++;
+          $(".playcards").empty();
+          render();
+        }
+        else { 
+          console.log("in the success function – player is: " + round.player);
+          round.allAnswersEntered = true;
+          $("#time-up-message").remove();
+          render();
+        }
       }
     });
   }
@@ -217,7 +205,7 @@ $(document).ready(function(){
         // Create buttons, add class and id
         var button = $("<button>").text("Reject");
         button.addClass("reject-button");
-        button.attr("id", "reject-" + n);
+        button.attr("id", "reject-" + playerCounter + "-" + n);
         var id = "#slot-"+playerCounter+"-"+n;
         button.appendTo(id);
 
@@ -242,38 +230,65 @@ $(document).ready(function(){
     finishButton.addClass("finish-button");
     finishButton.text("Finished Scoring");
     finishButton.one("click", submitFinalScores);
-    // finishButton.one("click", function() {
-    //   round.finishedScoring = true;
-    //   render();
-    // });
-    finishButton.appendTo(".score");
+    $(".playcards").append(finishButton);
   }
 
-  // function submitFinalScores() {
-  //   getUserVotes();
-  //   setFinalScore();
-  // }
+  function submitFinalScores() {
+    getUserVotes();
+    round.sumFinalScore();
+    endGameMessage();
+  }
 
-  // // Collect scores from the user rejected answers
-  // function getUserVotes() {
-  //   for(var i = 0; i < 12; i++) {
-  //     var buttonId = "#reject-" + i;
-  //     if($(buttonId).hasClass("rejected-button")) {
-  //       round.scoreAnswer(i,0);
-  //     } else {
-  //       round.scoreAnswer(i,1);
-  //     }
-  //   }
-  // }
+  // Collect scores from the user rejected answers
+  function getUserVotes() {
+    for(var p = 0; p < round.numberOfPlayers; p++) {
+      for(var i = 0; i < 12; i++) {
+        var buttonId = "#reject-" + p + "-" + i;
+        if($(buttonId).hasClass("rejected-button")) {
+          round.scoreAnswer(p, i, 0);
+        } else {
+          round.scoreAnswer(p, i, 1);
+        }
+      }
+    }
+  }
 
-  // // Ajax to send scores back to the server
+  function endGameMessage() {
+    endGameDisplay();
+    var endDiv = $("<div>").attr("id", "game-over");
+
+    $("<h1>").text("Game Over!").appendTo(endDiv);
+    $("<h2>").text("Final Score:").appendTo(endDiv);
+    $("<h3>").text("Player 1: " + round.finalScore[0]).appendTo(endDiv);
+    $("<h3>").text("Player 2: " + round.finalScore[1]).appendTo(endDiv);
+
+    var winner = $("<h2>");
+    if (round.finalScore[0] > round.finalScore[1]) {
+      winner.text("Player 1 Wins!");
+    } else if (round.finalScore[0] < round.finalScore[1]) {
+      winner.text("Player 2 Wins!");
+    } else {
+      winner.text("Tie Game!");
+    }
+    winner.appendTo(endDiv);
+    $(".playcards").after(endDiv);
+    
+  }
+
+  function endGameDisplay() {
+    $(".reject-button").attr("disabled", true);
+    $(".finish-button").remove();
+    $(".score h3").remove();
+  }
+
+  // Ajax to send scores back to the server
   // function setFinalScore() {
   //   $.ajax({
   //     dataType: "json",
-  //     url: "finalize",
-  //     data: {scores: round.scores, id: window.location.pathname.replace("/rounds/", "")},
+  //     url: window.location.pathname.replace("/rounds/", "") + "/finalize",
+  //     data: { scores: round.scores },
   //     success: function(success) {
-  //       console.log(success);
+  //       console.log("Final scores received!");
   //       for (var j = 0; j < 12; j++) {
   //         round.scores[j] = success["scores"][j];
   //       }
@@ -286,12 +301,5 @@ $(document).ready(function(){
   //   });
   // }
 
-  function endGameMessage() {
-    $("<h1>").text("Game Over!").appendTo(".score");
-    $("<h2>").text("Final Score: " + round.finalScore).appendTo(".score");
-    $(".reject-button").attr("disabled", true);
-    $(".finish-button").remove();
-    $(".score h3").remove();
-  }
 
 });

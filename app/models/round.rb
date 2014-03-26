@@ -30,18 +30,14 @@ class Round < ActiveRecord::Base
 
   def auto_reject(player, answers)
     (0..11).each do |index|
-      # TODO Record each answer on Redis
       if answers[index].to_s == "" || answers[index].to_s.first.downcase != letter
-        # self.set_score(index, 0)
         $redis.HSET(self.id, "player#{player}::score#{index}", 0)
       else
-        # self.set_score(index, 1)
         $redis.HSET(self.id, "player#{player}::score#{index}", 1)
       end
 
       $redis.HSET(self.id, "player#{player}::answer#{index}", answers[index])
     end
-
   end
 
   def number_of_players
@@ -49,34 +45,34 @@ class Round < ActiveRecord::Base
   end
 
   def all_player_answers
-
     (0...self.number_of_players).each do |player_number|
       (0..11).each do |answer_number|
         @answers[player_number][answer_number] = ($redis.hget(self.id, "player#{player_number}::answer#{answer_number}"))
       end
     end
-
     return @answers
-
   end
 
   def all_player_scores
-
     (0...self.number_of_players).each do |player_number|
       (0..11).each do |score_number|
         @scores[player_number][score_number] = ($redis.hget(self.id, "player#{player_number}::score#{score_number}"))
       end
     end
-
     return @scores
   end
 
   def finalize_answers(scores)
-    # self.after_initialize
-    (0..11).each do |index|
-      self.set_score(index, scores[index])
+    ("0".."1").each do |player|
+      (0..11).each do |index|
+        if answers[player][index] == 0
+          $redis.HSET(self.id, "player#{player}::score#{index}", 0)
+        else
+          $redis.HSET(self.id, "player#{player}::score#{index}", 1)
+        end
+      end
     end
-    self.scores
+    return @scores
   end
 
   # def set_score(index, score)

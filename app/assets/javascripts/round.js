@@ -10,7 +10,7 @@ function Round(categoryList){
   // this.answersObject = {};
   this.scores = [[], []];
   // this.scoresObject = {};
-  this.finalScore = 0;
+  this.finalScore = [0,0];
   this.timerStarted = false;
   this.player = 0;
   this.numberOfPlayers = 2;
@@ -74,8 +74,10 @@ Round.prototype.scoreAnswer = function(player, answerNumber, score) {
 
 // Sum up the scores of individual answers to get the player's final score for the round
 Round.prototype.sumFinalScore = function() {
-  for(var i = 0; i < 12; i++) {
-    this.finalScore += parseInt(this.scores[i]);
+  for(var p = 0; p < 2; p++) {
+    for(var i = 0; i < 12; i++) {
+      this.finalScore[p] += parseInt(this.scores[p][i]);
+    }
   }
 };
 

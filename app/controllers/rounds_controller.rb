@@ -1,6 +1,6 @@
 class RoundsController < ApplicationController
 
-  before_action :load_round, only: [:category, :get_letter, :finalize_answers]
+  before_action :load_round, only: [:category, :get_letter]
 
 
   def new
@@ -30,7 +30,9 @@ class RoundsController < ApplicationController
   end
 
   def finalize_answers
-    @scores = @round.finalize_answers(params["scores"])
+    @round = Round.find(params[:id])
+    @round.finalize_answers(params["scores"])
+    @scores = @round.all_player_scores
     render json: {scores: @scores}
   end
 
