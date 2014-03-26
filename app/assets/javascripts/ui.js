@@ -37,7 +37,7 @@ $(document).ready(function(){
     } else {
       timer.text("Start Timer!");
       $("#time-up-message").text("Player 2's Turn!");
-      round.timeLeft = 10;
+      round.timeLeft = 90;
       round.timerStarted = false;
       timerListener();
       renderPlaycard();
