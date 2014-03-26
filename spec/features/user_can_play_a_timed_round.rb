@@ -12,8 +12,10 @@ describe "user can play a timed round", :js => true do
 	end
 
 	it "plays a timed round" do
+		click_button("Roll The Die")
 		click_button("Start Timer!")
 		#my, oh my there are a lot of italian "p" words!
+		fill_in "answer-0", :with => "puntine"
 		fill_in "answer-1", :with => "pizza"
 		fill_in "answer-2", :with => "pasta"
 		fill_in "answer-3", :with => "pepperoni"
@@ -25,10 +27,9 @@ describe "user can play a timed round", :js => true do
 		fill_in "answer-9", :with => "pomodoro"
 		fill_in "answer-10", :with => "penne"
 		fill_in "answer-11", :with => "panna cotta"
-		fill_in "answer-12", :with => "puntine"
-		Capybara.default_wait_time = 6
-		expect(page).to have_content "Time's Up!!!"
-		find('input#answer-2')[:disabled].should eq "true"
+		Capybara.default_wait_time = 10
+		expect(page).to have_content "Player 2's Turn!"
+		# find('input#answer-2')[:disabled].should eq "true"
 	end
 
 	# it "lets user reject answers" do

@@ -1,17 +1,22 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
- *= require normalize
- *= require_self
- *= require_tree .
- */
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+* listed below.
+*
+* Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+* or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+*
+* You're free to add application-wide styles to this file and they'll appear at the top of the
+* compiled file, but it's generally better to create a new file per style scope.
+*
+*= require normalize
+*= require_self
+*= require_tree .
+*/
+
+html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote, pre, form, fieldset, table, th, td {
+  padding: 0;
+  margin: 0;
+} 
 
 body {
   text-align: center;
@@ -38,9 +43,13 @@ header {
   font-family: 'Cinzel', serif;
   font-size: 48px;
   color: yellow;
-  padding: 30px;
   width: 900px;
-  margin: 0 auto 25px auto;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+footer {
+  height: 100px;
 }
 
 .logo {
@@ -49,53 +58,54 @@ header {
 
 .content-container {
   position: relative;
-  width: 1000px;
   margin: 0 auto;
 }
-
-/*.page-wrapper {
-
-  padding: 30px;
-  border: 10px solid #000000;
-  margin: 0 auto;
-  width: 90%;
-  min-height: 650px;
-}*/
 
 .playcards {
   background: white;
   padding: 20px;
   padding-top: 40px;
   text-align: left;
-  float: left;
+  /*float: left;*/
   position: relative;
-  border: 5px solid #000000;
-  font-size: 24px;
-  color: #5a5a5a;
+  border: 5px solid #000000  ;
+  font-size: 20px;
+  color: #5a5a5a  ;
+  width: 550px;
+  margin: 0 auto;
 }
 
-.game-controls {
-  float: right;
+#die_button {
+  vertical-align: left;
+  width: 195px;
 }
 
 #roll_result {
+  float: right;
+  vertical-align: center;
   font-family: 'Cinzel', serif;
-  font-size: 48px;
-  color: blue;
+  font-size: 35px;
+  color: black;
   text-align: center;
   background: white;
-  margin: 10px;
+  margin-top: 25px;
+  margin-right: 10px;
   width: 100px;
-  position: center;
-  border:hidden 5px #000000;
   -moz-border-radius: 14px;
   -webkit-border-radius: 14px;
   border-radius: 14px;
-  margin-left: 35px;
+
+}
+
+.timer {
+  vertical-align: center;
+  float: right;
 }
 
 input {
   margin: 5px;
+  margin-left: 10px;
+  text-align: justify;
 }
 
 .clear {
@@ -103,12 +113,12 @@ input {
 }
 button, input[type="submit"]{
   color: rgb(96, 96, 96);
-  font-size: 24px;
-  padding: 15px;
+  font-size: 20px;
+  padding: 10px;
   text-shadow: 0px -1px 0px rgba(30, 30, 30, 0.8);
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
-  border-radius: 25px;
+  border-radius: 20px;
   background: rgb(239, 180, 43);
   background: -moz-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
   background: -webkit-linear-gradient(90deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
@@ -117,6 +127,60 @@ button, input[type="submit"]{
   background: linear-gradient(0deg, rgb(239, 180, 43) 30%, rgb(255, 225, 33) 70%);
   -webkit-box-shadow: 0px 2px 1px rgba(50, 50, 50, 0.75);
   -moz-box-shadow:    0px 2px 1px rgba(50, 50, 50, 0.75);
-  box-shadow:         0px 2px 1px rgba(50, 50, 50, 0.75);
+  box-shadow:        0px 2px 1px rgba(50, 50, 50, 0.75);
 }
 
+label.answer-label {
+  text-align: right;
+  display: inline-block;
+  width: 250px;
+  color: green; 
+}
+
+.game-controls {
+  position: relative;
+  height: 110px;
+}
+
+.die {
+  float: right;
+  margin: 10px;
+}
+
+.roll_result {
+  margin: 10px;
+}
+
+.next-round-button {
+  margin: 10px;
+}
+
+.timer {
+  float: right;
+  margin: 10px;
+}
+
+.timer button {
+  width: 195px;
+}
+
+button[disabled] {
+  background: #ccc;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.score {
+  margin: 50px;
+}
+
+.rejected-button {
+  background-color: red;
+}
+
+.rejected-input {
+  text-decoration: line-through;
+  background-color: lightgray;
+}
