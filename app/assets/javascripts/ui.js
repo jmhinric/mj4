@@ -222,7 +222,7 @@ $(document).ready(function(){
         button.appendTo(id);
 
         // Add CSS for rejected answers
-        if(round.scores[playerCounter][n] === 0) {
+        if(round.scores[playerCounter][n] === "0") {
           $(button).toggleClass("rejected-button");
           $(button).attr("disabled", "disabled");
           $(button).siblings().toggleClass("rejected-input");
