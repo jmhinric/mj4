@@ -12,8 +12,6 @@ $(document).ready(function(){
   
 
   function render() {
-    
-    console.log("Player is: " + round.player);
     if (round.allAnswersEntered) {
       $(".playcards").empty();
       renderJudging();
@@ -34,12 +32,12 @@ $(document).ready(function(){
 
       timerListener();
 
-      // First player has done the timer, second player needs to play
-      //Reset DOM & playcard for Player 1
+    // First player has entered answers, second player needs to play
+    //Reset DOM & playcard for Player 1
     } else {
       timer.text("Start Timer!");
       $("#time-up-message").text("Player 2's Turn!");
-      round.timeLeft = 10;
+      round.timeLeft = 90;
       round.timerStarted = false;
       timerListener();
       renderPlaycard();
@@ -49,24 +47,22 @@ $(document).ready(function(){
 
   function renderJudging() {
     for(var playerCounter = 0; playerCounter < round.numberOfPlayers; playerCounter ++){
-      var n = 0;
       $.each(round.categoryList, function(index, category) {
 
         // Create and append HTML label
         if (playerCounter === 0 ) {
-          $("<label class='answer-label' id='slot-"+playerCounter+"-"+n+"'>"+category+"</label>").appendTo(".playcards");
+          $("<label class='answer-label' id='slot-"+playerCounter+"-"+index+"'>"+category+"</label>").appendTo(".playcards");
         } else {
-          $("<label class='answer-label' id='slot-"+playerCounter+"-"+n+"'></label>").appendTo(".playcards");
+          $("<label class='answer-label' id='slot-"+playerCounter+"-"+index+"'></label>").appendTo(".playcards");
         }
         
         // Create input fields with event listeners
-        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+playerCounter+"-"+n+"'>");
-        input.val(round.answers[playerCounter][n]);
+        var input = $("<input class='playcard' type='text' disabled='disabled' id='answer-"+playerCounter+"-"+index+"'>");
+        input.val(round.answers[playerCounter][index]);
 
-        input.appendTo("#slot-"+playerCounter+"-"+n);
+        input.appendTo("#slot-"+playerCounter+"-"+index);
         $("<br>").appendTo(".playcards");
-        addRejectButtons(playerCounter, n);
-        n++;
+        addRejectButtons(playerCounter, index);
       });
     }
   }
@@ -101,8 +97,9 @@ $(document).ready(function(){
         round.submitAnswer(round.player, e.target.id.replace("answer-", ""), input.val());
       });
 
-      input.appendTo("#slot-"+n);
-      $("<br>").appendTo(".playcards");
+       $("#slot-"+n).after(input);
+      // input.appendTo("#slot-"+n);
+      // $("<br>").appendTo(".playcards");
       n++;
     });
   }
@@ -182,13 +179,11 @@ $(document).ready(function(){
           }
         }
         if (round.player < (round.numberOfPlayers - 1)) { 
-          console.log("in the success function – player is: " + round.player);
           round.player++;
           $(".playcards").empty();
           render();
         }
         else { 
-          console.log("in the success function – player is: " + round.player);
           round.allAnswersEntered = true;
           $("#time-up-message").remove();
           render();
@@ -208,6 +203,7 @@ $(document).ready(function(){
         button.attr("id", "reject-" + playerCounter + "-" + n);
         var id = "#slot-"+playerCounter+"-"+n;
         button.appendTo(id);
+        // $("#answer-'+playerCounter+'-'+n+'").after(button);
 
         // Add CSS for rejected answers
         if(round.scores[playerCounter][n] === "0") {
@@ -300,6 +296,5 @@ $(document).ready(function(){
   //     }
   //   });
   // }
-
 
 });

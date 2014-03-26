@@ -5,7 +5,7 @@ function Round(categoryList){
   }
   this.letter = "";
   this.categoryList = categoryList;
-  this.timeLeft = 10;
+  this.timeLeft = 90;
   this.answers = [[], []];
   // this.answersObject = {};
   this.scores = [[], []];

@@ -1,51 +1,57 @@
-<!-- <div class="page-wrapper"> -->
+<header>
 
-  <header>
+  <div class="logo">
+    <%= link_to root_path do %>
+      <%= image_tag("Scattegories-logo1.png", :alt => "Scattergories", :width =>"150px") %> 
+      <% end %>
+  </div>
 
-    <div class="logo">
-      <%= link_to root_path do %>
-        <%= image_tag("Scattegories-logo1.png", :alt => "Scattergories", :width =>"150px") %> 
-        <% end %>
+  <h1>Welcome to Scattergories</h1>
+
+  <div class="game-controls">
+
+    <div class="timer">
+      <button>Start Timer!</button>
     </div>
 
-    <h1>Welcome to Scattergories</h1>
-
-  </header>
-
-  <status>
-  </status>
-  <!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
-
-  <div class="content-container">
-    <div class="playcards">
-      <%# n = 1 %>
-
-      <%# $redis.smembers(@game_category).each do |category_item| %>
-        <!-- <label class="answer-label" id="slot-<%# n %>" ><%# category_item %> -->
-          <!-- <input class="playcard" id="answer-<%# n %>" name="<%# n %>" type="text" disabled="disabled"> -->
-        <!-- </label><br/> -->
-        <%# n+= 1 %>
-      <%# end %>
+    <div class="die">
+      <button id="die_button">Roll The Die</button>
     </div>
 
-    <div class="game-controls">
-      <div class="die">
-        <button id="die_button">Roll The Die</button>
-        <div id="roll_result">
-          
-        </div>
-      </div>
-      <div class="timer">
-        <button>Start Timer!</button>
-      </div>
-      <div class="next-round-button">
-      </div>
-      <div class="score">
-      </div>
+    <div id="roll_result">
     </div>
+
+    <div class="next-round-button">
+    </div>
+
+    <div class="score">
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+
+</div>
+
+</header>
+
+<!--Remember that :list_one will be dynamically selected once we give users a choice as to which list they're playing on-->
+
+
+
+<div class="content-container">
+  <div class="playcards">
+    <%# n = 1 %>
+
+    <%# $redis.smembers(@game_category).each do |category_item| %>
+      <!-- <label class="answer-label" id="slot-<%# n %>" ><%# category_item %> -->
+        <!-- <input class="playcard" id="answer-<%# n %>" name="<%# n %>" type="text" disabled="disabled"> -->
+      <!-- </label><br/> -->
+      <%# n+= 1 %>
+    <%# end %>
   </div>
 
   <div class="clear">
-  </div>
-  
-<!-- </div> -->
+</div>
+
+<footer>
+</footer>
