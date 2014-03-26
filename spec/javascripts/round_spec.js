@@ -141,9 +141,10 @@ describe("Round", function(){
 
     describe("#sumFinalScore", function() {
       it("sums up a player's finals score", function() {
-        round.scores = [0,1,1,1,0,0,0,0,0,0,0,1];
+        round.scores = [[0,1,1,1,0,0,0,0,0,0,0,1],
+                        [0,1,1,1,0,0,0,0,0,0,1,1]];
         round.sumFinalScore();
-        expect(round.finalScore).toBe(4);
+        expect(round.finalScore).toEqual([4,5]);
       });
     });
   });
